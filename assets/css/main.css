@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'Eurostile';
+  src: url('~/assets/fonts/EurostileLTStd-Demi.woff');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Eurostile';
+  src: url('~/assets/fonts/EurostileLTStd-Ex2.woff');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Offbit';
+  src: url('~/assets/fonts/OffBit-Bold.woff') format("woff"),
+       url('~/assets/fonts/OffBit-Bold.woff2') format('woff2');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Dotbit';
+  src: url('~/assets/fonts/OffBit-DotBold.ttf') format("ttf"),
+       url('~/assets/fonts/OffBit-DotBold.woff') format("woff"),
+       url('~/assets/fonts/OffBit-DotBold.woff2') format('woff2');
+  font-weight: 500;
+}
+
+html {
+  width: 100dvw;
+  height: 100dvh;
+}
+
+html, body, * {
+  box-sizing: border-box; 
+}
