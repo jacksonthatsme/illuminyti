@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@fullpage/nuxt-fullpage',
     'nuxt-swiper',
     '@hypernym/nuxt-gsap',
+    '@nuxtjs/device',
   ],
   css: [
     '~/assets/css/reset.css',
