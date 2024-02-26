@@ -1,11 +1,15 @@
 <template>
+  <ClientOnly>
   <div class="envelopeContainer">
     <img src="/assets/images/Envelope[Layer2].png" class="envelopeLid" alt="Envelope Lid" />
     <img src="/assets/images/Emblem.svg" class="emblem" alt="Emblem" />
     <h1 class="envelopeTitle">Download the app to begin</h1>
-    <h2 class="envelopeSubtitle">Scroll for <br/> instructions</h2>
+    <div class="evelopeButton" v-if="$pwa?.showInstallPrompt">
+      Install
+    </div>
+    <h2 v-if="!$pwa?.showInstallPrompt" class="envelopeSubtitle">Scroll for <br/> instructions</h2>
   </div>
-  <div class="instructionsContainer">
+  <div class="instructionsContainer" v-if="!$pwa?.showInstallPrompt">
     <h1 class="instructionsTitle">Instructions</h1>
     <div class="instructions">
       <div v-for="(instruction, index) in pwaInstructions" :key="index" class="instructionBlock">
@@ -19,6 +23,7 @@
       </div>
     </div>
   </div>
+  </ClientOnly>
 </template>
 
 <script setup>
