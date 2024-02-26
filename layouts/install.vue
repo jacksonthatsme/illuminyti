@@ -2,7 +2,7 @@
   <ClientOnly>
   <div class="envelopeContainer">
     <img src="/assets/images/Envelope[Layer2].png" class="envelopeLid" alt="Envelope Lid" />
-    <img src="/assets/images/Emblem.svg" class="emblem" alt="Emblem" />
+    <img src="/images/install/emblem.svg" class="emblem" alt="Emblem" />
     <h1 class="envelopeTitle">Download the app to begin</h1>
     <div class="evelopeButton" v-if="$pwa?.showInstallPrompt">
       Install
