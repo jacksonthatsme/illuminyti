@@ -20,8 +20,8 @@ export default defineNuxtConfig({
       name: 'Illuminyti',
       short_name: 'Illuminyti',
       theme_color: '#000000',
-      display: 'standalone',
-      start_url: '/',
+      display: 'fullscreen',
+      start_url: '/?fullscreen=true',
       icons: [
         {
           src: '/icons/icon-192x192.png',
