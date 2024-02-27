@@ -50,6 +50,7 @@
   background: none;
   outline: none;
   margin: 5px;
+  border-radius: 0px;
   border-style: solid;
   border-width: 0px 0px 2px 0px;
   border-color: #5E5940;

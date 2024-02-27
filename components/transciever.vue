@@ -142,17 +142,14 @@
 
 <style lang="scss" scoped>
   .container {
-    width: 100dvw;
+    width: 100%;
     height: 100dvh;
-    display: flex;
-    justify-content: center;
     background-color: #000000;
     overflow-x: hidden;
     overflow-y: visible;
   }
   .wrapper {
-    max-width: 500px;
-    width: 100dvw;
+    width: 100%;
     height: 100dvh;
     display: grid;
     grid-template-rows: minmax(40px,60px) 1fr;
@@ -222,7 +219,7 @@
     grid-row: 1 / 3;
     grid-column: 1 / -1;
     background: url('/assets/images/NoiseTextureSeamless.jpg'), #94AE32;
-    background-blend-mode: multiply, normal;
+    background-blend-mode: multiply;
     margin-bottom: 10px;
     border-radius: 45% 45% 10px 10px;
     box-shadow: 6px 6px 20px 0px rgba(0, 0, 0, 0.45) inset;

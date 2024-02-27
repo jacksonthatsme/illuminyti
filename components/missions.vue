@@ -16,6 +16,12 @@
         <div>{{ index }}</div>
       </SwiperSlide>
     </Swiper>
+    <div class="emptyWrapper">
+      <img src="/images/missions/emptyImage.png" alt="" class="emptyImage">
+      <div class="emptyMessage">
+        Nothing to see here yet
+      </div>
+    </div>
   </div>
 </template>
 
@@ -65,14 +71,16 @@
 
 <style lang="scss" scoped>
   .container {
-    width: 100dvw;
+    width: 100%;
     height: calc(100dvh - 60px);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10dvh 5dvw 10dvh 5dvw;
     transform: translateY(-30px);
-    overflow: hidden;
+    overflow-x: visible;
+    overflow-y: clip;
+    position: relative;
   }
   .edge {
     background-color: red;
@@ -117,5 +125,30 @@
   }
   .missionSlide:not(.swiper-slide-active) {
     transition-duration: 500ms;
+  }
+
+  .emptyWrapper {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top:0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .emptyImage {
+    width: 200px;
+  }
+  .emptyMessage {
+    color: #4D4D4D;
+    font-family: 'Eurostile';
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
   }
 </style>

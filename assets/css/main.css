@@ -33,3 +33,7 @@ html {
 html, body, * {
   box-sizing: border-box; 
 }
+
+html, body {
+  background-color: black;
+}
