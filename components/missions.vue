@@ -26,45 +26,49 @@
 </template>
 
 <script setup>
-  import { ref, reactive, watch, nextTick } from 'vue';
-  const swiper = ref(null)
-  const { $gsap } = useNuxtApp()
-  function getSwiperRef (swiperInstance) {
-    swiper.value = swiperInstance
-  }
+import { ref, reactive, watch, nextTick } from 'vue';
+const { $gsap } = useNuxtApp();
+import { useUnlockedStore } from '~/stores/unlocked'; // Import the Pinia store
 
-  const slides = reactive([]);
-  const slideRefs = ref(slides.map(() => ref(null))); // Initialize with null refs for each slide
+const swiper = ref(null);
 
-  watchEffect(() => {
-    console.log('Slides or slideRefs changed:', slideRefs.value);
-    const newSlidesLength = slides.length;
-    const oldSlidesLength = slideRefs.value.length;
+function getSwiperRef(swiperInstance) {
+  swiper.value = swiperInstance;
+}
 
-      // A new slide was added
-      const newSlideIndex = newSlidesLength;
-      console.log(newSlideIndex)
-      nextTick(() => {
-        const latestSlideRef = slideRefs.value[newSlideIndex];
-        if (latestSlideRef) {
-          console.log(latestSlideRef)
-          $gsap.from(latestSlideRef.$el, {
-            duration: 1,
-            y: '-800px',
-          });
-        } else {
-          console.log('New slide ref not found or not rendered yet');
-        }
+const slides = reactive([]);
+const slideRefs = ref(slides.map(() => ref(null)));
+
+const unlockedStore = useUnlockedStore(); // Access the unlocked Pinia store
+const operations = queryContent('operations').find();
+
+watch(unlockedStore, () => {
+  const unlockedIds = unlockedStore.unlockedOperations;
+  const filteredSlides = operations.value.filter(operation => unlockedIds.includes(operation.id)); // Filter operations based on unlocked IDs
+  slides.value = filteredSlides; // Update slides with filtered operations
+
+  // Trigger animation for newly added slides
+  const newSlideIndex = slides.length - filteredSlides.length;
+  nextTick(() => {
+    const latestSlideRef = slideRefs.value[newSlideIndex];
+    if (latestSlideRef) {
+      $gsap.from(latestSlideRef.$el, {
+        duration: 1,
+        y: '-800px',
       });
+    }
   });
+});
+onMounted(() => {
+  console.log(operations.value);
+});
 
+// Seeding the Pinia store with test IDs (during development)
+if (process.env.NODE_ENV === 'development') {
+  unlockedStore.unlockedOperations = ['f-b-a', 'b-p-l']; // Replace with your test IDs
+}
   const setSlideRef = index => el => {
     slideRefs.value[index] = el;
-  };
-
-  const addSlide = () => {
-    slides.unshift(slides.length + 1); // Add a new number as a placeholder
-    slideRefs.value.unshift(ref(null)); // Also add a new ref for the new slide
   };
 
 </script>

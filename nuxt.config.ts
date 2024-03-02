@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     '@hypernym/nuxt-gsap',
     '@nuxtjs/device',
     '@vite-pwa/nuxt',
+    '@nuxt/content',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
   css: [
     '~/assets/css/reset.css',
@@ -60,4 +63,14 @@ export default defineNuxtConfig({
   plugins: [
     { src: '~/plugins/isInstalled.js'},
   ],
+  content: {
+    markdown: {
+      anchorLinks: false
+    }
+  },
+  gsap: {
+    extraPlugins: {
+      text: true
+    }
+  },
 })

@@ -54,7 +54,7 @@
               <div class="label">Num</div>
               <div class="indicator"></div>
             </div>
-            <div class="locationButton">
+            <div class="locationButton" @click="handleRelayLocation">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.08578L16.7953 5.88107L15.3811 7.29528L13 4.91421V9.62602C14.7252 10.0701 16 11.6362 16 13.5C16 14.0647 15.8825 14.6032 15.6707 15.0913L20 19.1801V16.3616H22V22.5H15.8102V20.5H18.4848L14.434 16.6743C13.7602 17.1915 12.9161 17.5 12 17.5C11.0839 17.5 10.2398 17.1915 9.56599 16.6743L5.51523 20.5H8.18976V22.5H2V16.3616H4V19.1801L8.32932 15.0913C8.11751 14.6032 8 14.0647 8 13.5C8 11.6362 9.27477 10.0701 11 9.62602V4.91421L8.61893 7.29528L7.20472 5.88107L12 1.08578ZM12 11.5C10.8954 11.5 10 12.3954 10 13.5C10 13.9456 10.1446 14.3546 10.3897 14.6864C10.7556 15.1819 11.3406 15.5 12 15.5C12.6594 15.5 13.2444 15.1819 13.6103 14.6864C13.8554 14.3546 14 13.9456 14 13.5C14 12.3954 13.1046 11.5 12 11.5Z"/>
               </svg>
@@ -73,10 +73,26 @@
 <script setup>
   import { ref } from 'vue'
   const resetKeypressesTimeout = ref(null);
+  import { useGeofencing } from '~/composables/useGeofencing'
+  const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation } = useGeofencing()
 
   function dialClick() {
     isNum.value = !isNum.value
   }
+
+  function handleRelayLocation() {
+    console.log("relay location")
+    checkLocation()
+  }
+
+  watch(isWithinGeofence, (newValue, oldValue) => {
+  if (newValue) {
+    console.log(`User is now within geofence: ${newValue.id}`);
+    // Perform actions based on the specific location ID
+  } else if (oldValue) {
+    console.log('User exited the geofence.');
+  }
+}, { immediate: true });
 
   const keyMappings = {
     '1': ['a', 'b', 'c'],
@@ -153,7 +169,6 @@
     height: 100dvh;
     display: grid;
     grid-template-rows: minmax(40px,60px) 1fr;
-    padding-top: 10px;
     // pointer-events: none;
     // user-select: none;
   }
@@ -389,5 +404,6 @@
     left: 64%;
     transform: translate(-25%, 10%);
     bottom: 0;
+    pointer-events: none;
   }
 </style>
