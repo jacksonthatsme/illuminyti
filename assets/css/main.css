@@ -11,6 +11,12 @@
 }
 
 @font-face {
+  font-family: 'Eurostile';
+  src: url('~/assets/fonts/EurostileLTStd.woff');
+  font-weight: 300;
+}
+
+@font-face {
   font-family: 'Offbit';
   src: url('~/assets/fonts/OffBit-Bold.woff') format("woff"),
        url('~/assets/fonts/OffBit-Bold.woff2') format('woff2');

@@ -12,8 +12,8 @@
       :modules="[SwiperEffectCards]"
       :effect="'cards'"
       >
-      <SwiperSlide v-for="index in slides" :key="index" :ref="setSlideRef(index)" class="missionSlide">
-        <div>{{ index }}</div>
+      <SwiperSlide v-for="(operation, index) in slides.value" :key="operation.id" :ref="setSlideRef(index)" class="missionSlide">
+        <missions-card :missions="operation.missions"></missions-card>
       </SwiperSlide>
     </Swiper>
     <div class="emptyWrapper">
@@ -24,6 +24,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, reactive, watch, nextTick } from 'vue';
@@ -40,11 +41,26 @@ const slides = reactive([]);
 const slideRefs = ref(slides.map(() => ref(null)));
 
 const unlockedStore = useUnlockedStore(); // Access the unlocked Pinia store
-const operations = queryContent('operations').find();
+
+const contentQuery = queryContent('operations');
+
+let operations = null; // Initialize operations outside
+
+contentQuery.find().then(fetchedOperations => {
+  operations = fetchedOperations; // Store fetched operations
+
+  // Seed test IDs before watch (if applicable)
+  unlockedStore.unlockedOperations = ['f-b-a', 'b-p-l']; // Replace with your test IDs
+  const unlockedIds = unlockedStore.unlockedOperations;
+  const filteredSlides = operations.filter(operation => unlockedIds.includes(operation.id)); // Filter operations based on unlocked IDs
+  slides.value = filteredSlides; // Update slides with filtered operations
+});
 
 watch(unlockedStore, () => {
+  if (!operations) return; // Skip if operations haven't been fetched yet
+
   const unlockedIds = unlockedStore.unlockedOperations;
-  const filteredSlides = operations.value.filter(operation => unlockedIds.includes(operation.id)); // Filter operations based on unlocked IDs
+  const filteredSlides = operations.filter(operation => unlockedIds.includes(operation.id)); // Filter operations based on unlocked IDs
   slides.value = filteredSlides; // Update slides with filtered operations
 
   // Trigger animation for newly added slides
@@ -59,17 +75,10 @@ watch(unlockedStore, () => {
     }
   });
 });
-onMounted(() => {
-  console.log(operations.value);
-});
 
-// Seeding the Pinia store with test IDs (during development)
-if (process.env.NODE_ENV === 'development') {
-  unlockedStore.unlockedOperations = ['f-b-a', 'b-p-l']; // Replace with your test IDs
-}
-  const setSlideRef = index => el => {
-    slideRefs.value[index] = el;
-  };
+const setSlideRef = index => el => {
+  slideRefs.value[index] = el;
+};
 
 </script>
 
@@ -82,12 +91,11 @@ if (process.env.NODE_ENV === 'development') {
     align-items: center;
     padding: 10dvh 5dvw 10dvh 5dvw;
     transform: translateY(-30px);
-    overflow-x: visible;
-    overflow-y: clip;
+    overflow-x: clip;
+    overflow-y: hidden;
     position: relative;
   }
   .edge {
-    background-color: red;
     height: 60px;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.00) 100%), url('/assets/images/HammeredMetalSeamlessTile.png');
     background-blend-mode: overlay, normal;
@@ -125,7 +133,6 @@ if (process.env.NODE_ENV === 'development') {
     height: 100%;
   }
   .missionSlide {
-    background-color: red;
   }
   .missionSlide:not(.swiper-slide-active) {
     transition-duration: 500ms;

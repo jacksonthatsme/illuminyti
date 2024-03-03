@@ -201,6 +201,7 @@
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.00) 100%), url('/assets/images/HammeredMetalSeamlessTile.png');
     background-blend-mode: overlay, normal;
     z-index: 9;
+    border-radius: 24px 24px 0px 0px;
   }
   .battery {
     flex: 1;
