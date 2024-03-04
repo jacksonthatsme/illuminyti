@@ -19,7 +19,7 @@
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 1 / 2; transform: rotate(98deg);" />
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 3 / 4; transform: rotate(18deg);" />
           <div class="screenWrapper">
-            <screen-content :code="code"></screen-content>
+            <component :is="currentScreen" v-bind="screenData"></component>
           </div>
           <div class="screenLabel">
             Transciever
@@ -72,9 +72,26 @@
 </template>
 <script setup>
   import { ref } from 'vue'
-  const resetKeypressesTimeout = ref(null);
+  import operationsIndex from '~/components/operationsIndex.vue'
+  import relayLocation from '~/components/relayLocation.vue'
+  import errorScreen from '~/components/errorScreen.vue'
   import { useGeofencing } from '~/composables/useGeofencing'
+  
+  const resetKeypressesTimeout = ref(null);
   const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation } = useGeofencing()
+  const activeOperation = ref(null)
+
+  const operationsQuery = queryContent('operations')
+  const operations = await operationsQuery.find() 
+
+  const screenData = computed(() => {
+    return {
+      operations: operations,
+      activeOperation: activeOperation.value,
+    }
+  })
+
+  console.log(screenData.value)
 
   function dialClick() {
     isNum.value = !isNum.value
@@ -85,14 +102,24 @@
     checkLocation()
   }
 
+  const currentScreen = computed(() => {
+    if (isRelayingLocation.value) {
+      return relayLocation
+    } else if (errorMessage.value) {
+      return errorScreen
+    } else {
+      return operationsIndex
+    }
+  })
+
   watch(isWithinGeofence, (newValue, oldValue) => {
-  if (newValue) {
-    console.log(`User is now within geofence: ${newValue.id}`);
-    // Perform actions based on the specific location ID
-  } else if (oldValue) {
-    console.log('User exited the geofence.');
-  }
-}, { immediate: true });
+    if (newValue) {
+      console.log(`User is now within geofence: ${newValue.id}`);
+      // Perform actions based on the specific location ID
+    } else if (oldValue) {
+      console.log('User exited the geofence.');
+    }
+  }, { immediate: true });
 
   const keyMappings = {
     '1': ['a', 'b', 'c'],
@@ -239,6 +266,11 @@
     margin-bottom: 10px;
     border-radius: 45% 45% 10px 10px;
     box-shadow: 6px 6px 20px 0px rgba(0, 0, 0, 0.45) inset;
+  }
+
+  .screenContent {
+    mix-blend-mode: multiply;
+    filter: drop-shadow(0px 7px 11px #000000);
   }
   .screenLabel {
     grid-row: 3 / 4;

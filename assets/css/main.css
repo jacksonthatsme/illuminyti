@@ -43,3 +43,17 @@ html, body, * {
 html, body {
   background-color: black;
 }
+
+.swiperBullet {
+  width: 12px;
+  height: 12px;
+  background-image: url('/assets/images/swiperBullet.svg');
+  display: inline-block;
+}
+
+.swiperBulletActive {
+  width: 12px;
+  height: 12px;
+  background-image: url('/assets/images/swiperBulletActive.svg');
+  display: inline-block;
+}

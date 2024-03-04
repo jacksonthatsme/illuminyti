@@ -15,6 +15,6 @@ export const useUnlockedStore = defineStore('unlocked', {
     },
   },
   persist: {
-    storage: localStorage,
+    storage: persistedState.localStorage,
   },
 })
