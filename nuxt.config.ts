@@ -25,7 +25,7 @@ export default defineNuxtConfig({
       short_name: 'Illuminyti',
       theme_color: '#000000',
       display: 'fullscreen',
-      start_url: '/?fullscreen=true',
+      start_url: '/',
       icons: [
         {
           src: '/icons/icon-192x192.png',
