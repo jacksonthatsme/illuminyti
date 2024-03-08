@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  target: 'static',
   components: true,
+  ssr: true,
   modules: [
     '@fullpage/nuxt-fullpage',
     'nuxt-swiper',

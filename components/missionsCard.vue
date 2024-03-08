@@ -11,6 +11,7 @@
       </div>
       <div class="missionContent">{{ mission.content }}</div>
     </div>
+    <div class="emblemOverlay"></div>
   </div>
 </template>
 
@@ -51,6 +52,7 @@ const missionLabel = computed(() => {
     -webkit-transform: perspective(999px);
     transform: perspective(999px);
     font-family: 'Eurostile';
+    position: relative;
   }
   .missionBlock {
     border-bottom: 1px solid #272727;
@@ -88,5 +90,16 @@ const missionLabel = computed(() => {
     line-height: 24px;
     font-weight: 300;
     text-transform: none;
+  }
+  .emblemOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: url('/assets/images/emblem-overlay.png');
+    background-size: 80% auto;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 </style>
