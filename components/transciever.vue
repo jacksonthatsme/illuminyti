@@ -19,6 +19,7 @@
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 1 / 2; transform: rotate(98deg);" />
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 3 / 4; transform: rotate(18deg);" />
           <div class="screenWrapper">
+            <div class="noiseOverlay"></div>
             <component :is="currentScreen" v-bind="screenData"></component>
           </div>
           <div class="screenLabel">
@@ -90,8 +91,6 @@
       activeOperation: activeOperation.value,
     }
   })
-
-  console.log(screenData.value)
 
   function dialClick() {
     isNum.value = !isNum.value
@@ -262,11 +261,27 @@
   .screenWrapper {
     grid-row: 1 / 3;
     grid-column: 1 / -1;
-    background: url('/assets/images/NoiseTextureSeamless.jpg'), #94AE32;
-    background-blend-mode: multiply;
+    // background: url('/assets/images/NoiseTextureSeamless.jpg'), #94AE32;
+    // background-blend-mode: multiply, none;
+    background-color: #94AE32;
     margin-bottom: 10px;
     border-radius: 45% 45% 10px 10px;
     box-shadow: 6px 6px 20px 0px rgba(0, 0, 0, 0.45) inset;
+    position: relative;
+    overflow: hidden;
+  }
+  .noiseOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/images/noiseOverlay.png');
+    mix-blend-mode: multiply;
+    z-index: 1;
+    pointer-events: none;
   }
 
   .screenContent {
