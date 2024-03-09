@@ -80,8 +80,8 @@
     }, "+=1");
 })
 const buildTypeIn = () => {
-    typeIn.play();
-  }
+  typeIn.play();
+}
 defineExpose({ buildTypeIn, tutorialDisplay });
 </script>
 
@@ -144,12 +144,6 @@ h1 + h2 {
 h2 + h2 {
   margin-top: 20px;
 }
-
-// #here-is-your-tranciever-use-it-to-complete-todays-operation {
-//   .tutorialAction {
-//     padding-bottom: 200px;
-//   }
-// }
 
 .tutorialWrapper:has(.tutorialContent #here-is-your-tranciever-use-it-to-complete-todays-operation) {
   .tutorialAction {

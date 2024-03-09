@@ -245,6 +245,7 @@
     background-color: red;
     border-radius: 18px;
     margin: 10px;
+    overflow: hidden;
     background: linear-gradient(0deg, rgba(246, 246, 246, 0.80) 0%, rgba(246, 246, 246, 0.80) 100%), url('/assets/images/BrushedMetalBlackBackground.jpeg');
     background-blend-mode: overlay, normal;
     background-size: cover, cover;

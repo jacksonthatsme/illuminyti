@@ -14,5 +14,7 @@
     mix-blend-mode: multiply;
     font-family: 'Offbit';
     background-image: url('/assets/images/relayLocationLoop.gif');
+    background-size: cover;
+    mix-blend-mode: multiply;
   }
 </style>
