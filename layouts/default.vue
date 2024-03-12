@@ -12,5 +12,6 @@ main {
   margin-left: auto;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
+  scroll-snap-points-y: repeat(100dvh);
 }
 </style>

@@ -52,7 +52,7 @@
   margin: 5px;
   border-radius: 0px;
   border-style: solid;
-  border-width: 0px 0px 2px 0px;
+  border-width: 0px 0px 3px 0px;
   border-color: #5E5940;
   text-align: center;
   font-size: 30px;

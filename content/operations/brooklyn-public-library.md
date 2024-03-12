@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Meet under the heavens above the crossroads
+This is the clue that points you towards the Brooklyn Public Library

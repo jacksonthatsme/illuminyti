@@ -150,4 +150,10 @@ h2 + h2 {
     padding-bottom: 200px;
   }
 }
+
+.tutorialWrapper:has(.tutorialContent #this-is-not-a-test) {
+  h1 + h1 {
+    margin-top: 0px;
+  }
+}
 </style>

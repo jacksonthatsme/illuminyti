@@ -86,7 +86,7 @@ const missionLabel = computed(() => {
   }
   .missionContent {
     padding: 16px 16px;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 24px;
     font-weight: 300;
     text-transform: none;

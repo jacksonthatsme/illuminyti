@@ -1,9 +1,10 @@
-
 <template>
   <div class="container">
     <div class="wrapper">
       <div class="top">
-        <div class="light">
+        <div class="light" :class="{'isOn': lightBulbState === 'on', 
+                                    'isOff': lightBulbState === 'off', 
+                                    'isBlinking': lightBulbState === 'blinking' }">
           <div class="bulb"></div>
           <div class="base"></div>
           <div class="glow"></div>
@@ -20,7 +21,7 @@
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 3 / 4; transform: rotate(18deg);" />
           <div class="screenWrapper">
             <div class="noiseOverlay"></div>
-            <component :is="currentScreen" v-bind="screenData"></component>
+            <component :is="currentScreenComponent" v-bind="screenData"></component>
           </div>
           <div class="screenLabel">
             Transciever
@@ -42,7 +43,7 @@
               </svg>
             </keypad-button>
             <keypad-button @click="handleKeyPress(0)">0</keypad-button>
-            <keypad-button :keySub="'ent'">
+            <keypad-button :keySub="'ent'" @click="handleEnter">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0002 12.5V4H20.0002V14.5H9.00015V18.9142L3.58594 13.5L9.00015 8.08579V12.5H18.0002Z" />
               </svg>
@@ -71,24 +72,43 @@
     </div>
   </div>
 </template>
+
 <script setup>
-  import { ref } from 'vue'
+  import { ref, shallowRef } from 'vue'
   import operationsIndex from '~/components/operationsIndex.vue'
   import relayLocation from '~/components/relayLocation.vue'
-  import errorScreen from '~/components/errorScreen.vue'
+  import locationNotFound from '~/components/locationNotFound.vue'
+  import locationFound from '~/components/locationFound.vue'
+  import missionsPrinting from '~/components/missionsPrinting.vue'
+  import cipher from  '~/components/cipher.vue'  
+  //import all components from /components/ciphers
   import { useGeofencing } from '~/composables/useGeofencing'
+  import { useActiveOperationStore } from '~/stores/activeOperation'
   
+  const activeOperationStore = useActiveOperationStore();
   const resetKeypressesTimeout = ref(null);
-  const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation } = useGeofencing()
+  const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing()
   const activeOperation = ref(null)
+  const currentScreenComponent = shallowRef(operationsIndex); // Default screen
+  const screenTimeoutRef = ref(null); // To manage screen transition timeouts
 
   const operationsQuery = queryContent('operations')
-  const operations = await operationsQuery.find() 
+  const operations = await operationsQuery.find()
+  const { $gsap } = useNuxtApp()
+  import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+  $gsap.registerPlugin(ScrollToPlugin)
+
+  const isNum = ref(false);
+  const code = ref('');
+  const keyPresses = new Map();
+  const lastKeyPressed = ref(null); // Keep track of the last key pressed
 
   const screenData = computed(() => {
     return {
       operations: operations,
-      activeOperation: activeOperation.value,
+      activeOperation: operations.find(op => op.id === activeOperationStore.activeOperationId),
+      code: code.value,
     }
   })
 
@@ -96,29 +116,85 @@
     isNum.value = !isNum.value
   }
 
-  function handleRelayLocation() {
-    console.log("relay location")
-    checkLocation()
+  async function handleRelayLocation() {
+    currentScreenComponent.value = relayLocation;
+    await checkLocation().then(async () => { // Make sure this function waits for checkLocation to finish
+      if (isWithinGeofence.value) {
+        activeOperationStore.setActiveOperationId(isWithinGeofence.value.id);
+        currentScreenComponent.value = locationFound;
+        screenTimeoutRef.value = setTimeout(async () => {
+          // const cipherComponent = (await import(`@/components/ciphers/${isWithinGeofence.value.id}.vue`)).default;
+          // currentScreenComponent.value = cipherComponent;
+          currentScreenComponent.value = cipher;
+        }, 2000);
+      } else {
+        currentScreenComponent.value = locationNotFound;
+        screenTimeoutRef.value = setTimeout(() => {
+          currentScreenComponent.value = operationsIndex;
+        }, 2000);
+      }
+    });
   }
 
-  const currentScreen = computed(() => {
+  const lightBulbState = computed(() => {
     if (isRelayingLocation.value) {
-      return relayLocation
-    } else if (errorMessage.value) {
-      return errorScreen
-    } else {
-      return operationsIndex
+      return 'blinking';
     }
-  })
 
-  watch(isWithinGeofence, (newValue, oldValue) => {
-    if (newValue) {
-      console.log(`User is now within geofence: ${newValue.id}`);
-      // Perform actions based on the specific location ID
-    } else if (oldValue) {
-      console.log('User exited the geofence.');
+    if (errorMessage.value) {
+      return 'off';
     }
-  }, { immediate: true });
+
+    if (isWithinGeofence.value) {
+      return 'on';
+    }
+
+    return 'off';
+  });
+
+  // const currentScreen = computed(() => {
+  //   const activeOperationId = activeOperationStore.activeOperationId;
+
+  //   if (isRelayingLocation.value) {
+  //     return relayLocation;
+  //   }
+
+  //   if (errorMessage.value) {
+  //     return locationNotFound;
+  //   }
+
+  //   if (isWithinGeofence.value && activeOperationId) {
+  //     return import(`./components/ciphers/${activeOperationId}.vue`)
+  //       .then((c) => c.default); // Dynamically import cipher component
+  //   }
+
+  //   return operationsIndex;
+  // });
+
+  // watch(isWithinGeofence, (newValue, oldValue) => {
+  //   if (newValue) {
+  //     console.log(`User is now within geofence: ${newValue.id}`);
+  //     //set active operation to new value id
+  //     activeOperation.value = newValue.id
+
+  //     // Perform actions based on the specific location ID (add your logic here)
+  //     console.log(`Perform actions for location ID: ${newValue.id}`);
+
+  //     // (Optional) Show location found screen for a brief period
+  //     const locationFoundTimeout = setTimeout(() => {
+  //       console.log('Location found screen timed out');
+  //     }, 2000);
+
+  //     // (Optional) Transition to cipher screen after location found timeout
+  //     clearTimeout(resetKeypressesTimeout.value); // Clear any existing timeout
+  //     resetKeypressesTimeout.value = setTimeout(() => {
+  //       clearTimeout(locationFoundTimeout); // Clear location found timeout before transition
+  //     }, 2000);
+  //   } else if (oldValue) {
+  //     console.log(oldValue)
+  //     console.log('User exited the geofence.');
+  //   }
+  // }, { immediate: true });
 
   const keyMappings = {
     '1': ['a', 'b', 'c'],
@@ -131,11 +207,6 @@
     '8': ['v', 'w', 'x'],
     '9': ['y', 'z'],
   };
-
-  const isNum = ref(false);
-  const code = ref('');
-  const keyPresses = new Map();
-  const lastKeyPressed = ref(null); // Keep track of the last key pressed
 
 
   const handleKeyPress = (key) => {
@@ -177,7 +248,23 @@
       code.value = code.value.slice(0, -1); // Remove the last character
     }
   };
-      
+  const handleEnter = () => {
+    // Perform an action when the enter key is pressed
+    console.log('Enter key pressed');
+    emit('printMission')
+  };
+
+  onMounted(() => {
+    // Start a timer when relaying location
+    if (errorMessage.value) {
+      setTimeout(() => {
+        clearError()
+      }, 4000);
+    }
+  });
+
+  //define emits print-mission
+  const emit = defineEmits(['printMission'])
 
 </script>
 
@@ -185,18 +272,16 @@
 <style lang="scss" scoped>
   .container {
     width: 100%;
-    height: 100dvh;
+    height: 100%;
     background-color: #000000;
     overflow-x: hidden;
     overflow-y: visible;
   }
   .wrapper {
     width: 100%;
-    height: 100dvh;
+    height: 100%;
     display: grid;
     grid-template-rows: minmax(40px,60px) 1fr;
-    // pointer-events: none;
-    // user-select: none;
   }
   .top {
     display: flex;
@@ -278,8 +363,9 @@
     right: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/assets/images/noiseOverlay.png');
-    mix-blend-mode: multiply;
+    background-image: url('/assets/images/NoiseTextureSeamless.jpg');
+    mix-blend-mode: color-burn;
+    background-size: 200px;
     z-index: 1;
     pointer-events: none;
   }
@@ -314,7 +400,35 @@
     width: 20px;
     border-radius: 10px 10px 0 0;
     background: radial-gradient(50% 50% at 50% 50%, #FC9B9B 0%, #FF4646 80%);
+
+    .isOff & {
+      background: radial-gradient(50% 50% at 50% 50%, #BA5E5E 0%, #552828 80%);
+    }
+
+    .isOn & {
+      background: radial-gradient(50% 50% at 50% 50%, #FC9B9B 0%, #FF4646 80%);
+    }
+    .isBlinking & {
+      animation: bulbBlinking 1s infinite steps(2);
+    }
   }
+  @keyframes bulbBlinking {
+    from {
+      background: radial-gradient(50% 50% at 50% 50%, #BA5E5E 0%, #552828 80%);
+    }
+    to {
+      background: radial-gradient(50% 50% at 50% 50%, #FC9B9B 0%, #FF4646 80%);
+    }
+  }
+  @keyframes glowBlinking {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: .6;
+    }
+  }
+
   .base {
     height: 5px;
     width: 30px;
@@ -329,7 +443,13 @@
     background-color: #FF2F2F;
     opacity: 0.3;
     filter: blur(27px);
-    top: -60px;
+    top: -40px;
+    .isOff & { 
+      opacity: 0;
+    }
+    .isBlinking & {
+      animation: glowBlinking 1s infinite steps(2);
+    }
   }
   .punchOuts {
     grid-row: 2/3;

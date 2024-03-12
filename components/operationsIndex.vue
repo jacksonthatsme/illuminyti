@@ -113,8 +113,8 @@
   padding-right: 16px;
 }
 .operationClue {
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 28px;
+  line-height: 36px;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;

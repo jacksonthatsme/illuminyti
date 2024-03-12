@@ -14,33 +14,40 @@ export const useGeofencing = () => {
     locations.value = content.map(location => ({ polygon: location.polygon, id: location.id })) // Add unique id if not present
   }
 
+  const clearError = () => {
+    errorMessage.value = '';
+  }
+
+  // In useGeofencing.js, modify the checkLocation function
   const checkLocation = async () => {
     console.log('Checking location...');
     isRelayingLocation.value = true;
     errorMessage.value = '';
-  
+
     try {
       if (!locations.value.length) {
         await fetchLocations();
       }
-  
+
       const userCoords = await getUserLocation();
-      console.log('User coordinates:', userCoords);
-  
-      isWithinGeofence.value = locations.value.find((location) => {
-        console.log('Checking against polygon:', location.polygon);
+
+      let found = locations.value.find((location) => {
         const polygon = location.polygon.map(point => ({ latitude: point.latitude, longitude: point.longitude }));
-        const isWithin = geolib.isPointInPolygon(userCoords, polygon);
-        console.log('Point in polygon result:', isWithin);
-        return isWithin;
+        return geolib.isPointInPolygon(userCoords, polygon);
       });
+
+      // Wait for 5 seconds before continuing
+      await new Promise(resolve => setTimeout(resolve, 5000));
+
+      isWithinGeofence.value = found;
     } catch (error) {
       console.error('Error checking location:', error);
     } finally {
       isRelayingLocation.value = false;
       console.log('Final isWithinGeofence value:', isWithinGeofence.value);
     }
-  }
+  };
+
 
   const getUserLocation = () => {
     return new Promise((resolve, reject) => {
@@ -59,6 +66,7 @@ export const useGeofencing = () => {
     locations,
     isWithinGeofence,
     errorMessage,
-    checkLocation 
+    checkLocation,
+    clearError,
   }
 }

@@ -1,25 +1,32 @@
 <template>
-  <div class="edge" @click="addSlide">
-    <div class="printSlotOuter">
-      <div class="printSlotInner"></div>
+  <div class="missionsSection">
+    <div class="edge" @click="addSlide">
+      <div class="printSlotOuter">
+        <div class="printSlotInner"></div>
+      </div>
     </div>
-  </div>
-  <div class="container">
-    <Swiper 
-      @swiper="getSwiperRef"
-      class="missionsWrapper"
-      :slides-per-view="1"
-      :modules="[SwiperEffectCards]"
-      :effect="'cards'"
-      >
-      <SwiperSlide v-for="(operation, index) in slides.value" :key="operation.id" :ref="setSlideRef(index)" class="missionSlide">
-        <missions-card :missions="operation.missions"></missions-card>
-      </SwiperSlide>
-    </Swiper>
-    <div class="emptyWrapper">
-      <img src="/images/missions/emptyImage.png" alt="" class="emptyImage">
-      <div class="emptyMessage">
-        Nothing to see here yet
+    <div class="missionsContainer">
+      <Swiper 
+        @swiper="getSwiperRef"
+        class="missionsWrapper"
+        :slides-per-view="1"
+        :modules="[SwiperEffectCards]"
+        :effect="'cards'"
+        >
+        <SwiperSlide v-for="(operation, index) in slides.value" :key="operation.id" :ref="setSlideRef(index)" class="missionSlide">
+          <missions-card :missions="operation.missions"></missions-card>
+        </SwiperSlide>
+      </Swiper>
+      <div class="emptyWrapper">
+        <div class="backArrow">
+          <svg width="42" height="14" viewBox="0 0 42 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 0.5L21 13L41 0.5" stroke="white"/>
+          </svg>
+        </div>
+        <img src="/images/missions/emptyImage.png" alt="" class="emptyImage">
+        <div class="emptyMessage">
+          Nothing to see here yet
+        </div>
       </div>
     </div>
   </div>
@@ -83,13 +90,18 @@ const setSlideRef = index => el => {
 </script>
 
 <style lang="scss" scoped>
-  .container {
+
+  .missionsSection {
+    height:100%;
     width: 100%;
-    height: calc(100dvh - 60px);
+  }
+  .missionsContainer {
+    width: 100%;
+    height: calc(100% - 30px);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10dvh 5dvw 10dvh 5dvw;
+    padding: 30% 5% 10% 5%;
     transform: translateY(-30px);
     overflow-x: clip;
     overflow-y: hidden;
@@ -146,13 +158,13 @@ const setSlideRef = index => el => {
     left: 0;
     bottom: 0;
     right: 0;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 60px auto 1fr 200px auto 1fr;
     justify-content: center;
-    align-items: center;
   }
   .emptyImage {
     width: 200px;
+    grid-row: 4/5;
   }
   .emptyMessage {
     color: #4D4D4D;
@@ -161,5 +173,10 @@ const setSlideRef = index => el => {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 14px;
+    grid-row: 5/6;
+  }
+  .backArrow {
+    justify-self: center;
+    grid-row: 2/3;
   }
 </style>
