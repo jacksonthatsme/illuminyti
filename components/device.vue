@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
+  <div class="deviceContainer" :class="{'isPeeking': isPeeking}">
     <div class="wrapper">
       <div class="top">
         <div class="light" :class="{'isOn': lightBulbState === 'on', 
                                     'isOff': lightBulbState === 'off', 
-                                    'isBlinking': lightBulbState === 'blinking' }">
+                                    'isBlinking': lightBulbState === 'blinking'}">
           <div class="bulb"></div>
           <div class="base"></div>
           <div class="glow"></div>
@@ -103,6 +103,9 @@
   const code = ref('');
   const keyPresses = new Map();
   const lastKeyPressed = ref(null); // Keep track of the last key pressed
+
+  const props = defineProps({'isPeeking': Boolean})
+  const isPeeking = computed(() => props.isPeeking)
 
   const screenData = computed(() => {
     return {
@@ -270,7 +273,7 @@
 
 
 <style lang="scss" scoped>
-  .container {
+  .deviceContainer {
     width: 100%;
     height: 100%;
     background-color: #000000;
@@ -574,5 +577,11 @@
     transform: translate(-25%, 10%);
     bottom: 0;
     pointer-events: none;
+  }
+  .isPeeking {
+    // transform: translateY(-200px);
+    position: relative;
+    z-index: 10;
+    // transition-duration: 500ms;
   }
 </style>

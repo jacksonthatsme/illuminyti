@@ -57,7 +57,7 @@ contentQuery.find().then(fetchedOperations => {
   operations = fetchedOperations; // Store fetched operations
 
   // Seed test IDs before watch (if applicable)
-  unlockedStore.unlockedOperations = ['f-b-a', 'b-p-l']; // Replace with your test IDs
+  // unlockedStore.unlockedOperations = ['f-b-a', 'b-p-l']; // Replace with your test IDs
   const unlockedIds = unlockedStore.unlockedOperations;
   const filteredSlides = operations.filter(operation => unlockedIds.includes(operation.id)); // Filter operations based on unlocked IDs
   slides.value = filteredSlides; // Update slides with filtered operations
@@ -86,6 +86,7 @@ watch(unlockedStore, () => {
 const setSlideRef = index => el => {
   slideRefs.value[index] = el;
 };
+defineExpose({ setSlideRef });
 
 </script>
 

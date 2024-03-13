@@ -11,7 +11,7 @@
   >
   <SwiperSlide>
     <div class="loadingWrapper">
-      <img src="/images/tutorial/loadingGraphic.png" alt="" class="loadingImage">
+      <img src="/images/tutorial/loadingGraphic.png" alt="" class="loadingImage" @click="skipTutorial">
       <div class="loadingContainer">
         <div class="loadingBar">
           <div class="loadingProgress">100</div>
@@ -42,12 +42,16 @@
       swiper.value.slideNext()
     }
   }
+  const emit = defineEmits(['tutorialComplete'])
 
   const tutorialPages = await queryContent('tutorial').find()
   onMounted(() => {
 
     swiper.value.on('slideChange', () => {
       displayRefs.value[swiper.value.activeIndex-1].buildTypeIn()
+      if (swiper.value.activeIndex === (tutorialPages.length)) {
+        emit('tutorialComplete')
+      }
     })
 
     $gsap.to('.loadingBar', {
@@ -66,6 +70,9 @@
     })
 
   })
+const skipTutorial = () => {
+  swiper.value.slideTo(tutorialPages.length)
+}
 </script>
 
 <style lang="scss" scoped>
