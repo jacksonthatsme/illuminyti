@@ -162,6 +162,7 @@
       currentScreenComponent.value = missionsPrinting;
       screenTimeoutRef.value = setTimeout(() => {
         currentScreenComponent.value = operationsIndex;
+        activeOperationStore.setActiveOperationId(null);
       }, 2000);
     } else {
       // If the code is incorrect, clear the code and show the operationsIndex screen
@@ -262,6 +263,7 @@
     border-radius: 50% 50% 10px 10px / 30% 30% 10px 10px;
     box-shadow: 6px 6px 20px 0px rgba(0, 0, 0, 0.45) inset;
     position: relative;
+    overflow: hidden;
   }
   .noiseOverlay {
     position: absolute;

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-  const { $gsap, $ScrollToPlugin, $ScrollTrigger } = useNuxtApp()
+  const { $gsap, $ScrollToPlugin, $ScrollTrigger, $event} = useNuxtApp()
   $gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
   const deviceRef = ref(null)
   const missionRef = ref(null)
@@ -68,6 +68,7 @@
     width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
+    overflow:hidden;
   }
   // .fullpage-swiper {
   //   height: 100dvh;
