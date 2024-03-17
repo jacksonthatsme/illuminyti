@@ -63,6 +63,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     { src: '~/plugins/isInstalled.js'},
+    {src: '~/plugins/event-bus.js'},
   ],
   content: {
     markdown: {

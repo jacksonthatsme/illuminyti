@@ -1,6 +1,6 @@
 ---
 name: Flatbush Ass
-code: home
+code: kirby
 polygon:
   - { latitude: 40.6792753, longitude: -73.9737126 }
   - { latitude: 40.6792357, longitude: -73.9738172 }

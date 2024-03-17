@@ -1,5 +1,5 @@
 <template>
-  <div class="splitInput" ref="inputCont">
+  <div class="splitInput" ref="inputRef">
     <input
       type="text"
       class="inputSlot"
@@ -12,6 +12,11 @@
   </div>
 </template>
 <script setup>
+  const inputRef = ref(null)
+  const {$gsap, $event} = useNuxtApp()
+
+  $event.$on('shakeInput', (e) => shakeInput())
+  
   const props = defineProps({
     code: String,
 
@@ -20,6 +25,48 @@
       required: true
     }
   });
+  const inputShake = $gsap.timeline({paused: true});
+  
+  const shakeInput = () => {
+    console.log('shakeInput')
+    // inputShake.play();
+    $gsap.to('.splitInput', .1, {
+      x: -7,
+      ease: "power3.inOut"
+    });
+    $gsap.to('.splitInput', .1, {
+      repeat: 4,
+      x: 7,
+      yoyo: true,
+      delay: .1,
+      ease: "power3.inOut"
+    });
+    $gsap.to('.splitInput', .1, {
+      x: 0,
+      delay: .1 * 4
+    });
+  }
+
+
+  onMounted: () => {
+    inputShake.to('.splitInput', .1, {
+      x: -7,
+      ease: Quad.easeInOut
+    });
+    inputShake.to('.splitInput', .1, {
+      repeat: 4,
+      x: 7,
+      yoyo: true,
+      delay: .1,
+      ease: Quad.easeInOut
+    });
+    inputShake.to('.splitInput', .1, {
+      x: 0,
+      delay: .1 * 4
+    });
+  }
+
+
 
   const slots = reactive([])
   for (let i =0; i < props.inputCount; i++) {
@@ -60,5 +107,7 @@
   text-transform: uppercase;
   font-family: 'Dotbit';
   font-weight: 500;
+  user-select: none;
+  pointer-events: none;
 }
 </style>

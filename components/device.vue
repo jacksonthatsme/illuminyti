@@ -31,24 +31,7 @@
           <img src="/images/transciever/PunchOuts.png" />
         </div>
         <div class="controlsContainer">
-          <div class="keypad">
-            <template v-for="(characters, key) in keyMappings" :key="key">
-              <keypad-button :keySub="characters.join('')" @click="handleKeyPress(key)">
-                {{ key }}
-              </keypad-button>
-            </template>
-            <keypad-button :keySub="'del'" @click="handleBackspace">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.62939 4C6.99463 4 6.39893 4.30133 6.02002 4.81198L1.59033 10.812C1.06885 11.5182 1.06885 12.4818 1.59033 13.188L6.02002 19.188C6.39893 19.6987 6.99463 20 7.62939 20H19.7134C20.8188 20 21.7134 19.1046 21.7134 18V6C21.7134 4.89542 20.8188 4 19.7134 4H7.62939ZM9.35986 8.35355L13.0063 12L9.35986 15.6465L10.0669 16.3536L13.7134 12.7071L17.3599 16.3536L18.0669 15.6465L14.4204 12L18.0669 8.35355L17.3599 7.64645L13.7134 11.2929L10.0669 7.64645L9.35986 8.35355Z"/>
-              </svg>
-            </keypad-button>
-            <keypad-button @click="handleKeyPress(0)">0</keypad-button>
-            <keypad-button :keySub="'ent'" @click="handleEnter">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M18.0002 12.5V4H20.0002V14.5H9.00015V18.9142L3.58594 13.5L9.00015 8.08579V12.5H18.0002Z" />
-              </svg>
-            </keypad-button>
-          </div>
+          <keypad @key-press="handleKeyPress" @backspace="handleBackspace" @enter="handleEnter" :isNum="isNum"></keypad>
           <div class="rightRail">
             <div class="dial" @click="dialClick" :class="isNum ? 'numerals' : 'letters'">
               <img src="/images/transciever/Dial.png" alt="">
@@ -81,28 +64,24 @@
   import locationFound from '~/components/locationFound.vue'
   import missionsPrinting from '~/components/missionsPrinting.vue'
   import cipher from  '~/components/cipher.vue'  
-  //import all components from /components/ciphers
   import { useGeofencing } from '~/composables/useGeofencing'
   import { useActiveOperationStore } from '~/stores/activeOperation'
   
   const activeOperationStore = useActiveOperationStore();
-  const resetKeypressesTimeout = ref(null);
+  const unlockedStore = useUnlockedStore(); // Access the Pinia store
   const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing()
-  const activeOperation = ref(null)
   const currentScreenComponent = shallowRef(operationsIndex); // Default screen
   const screenTimeoutRef = ref(null); // To manage screen transition timeouts
 
   const operationsQuery = queryContent('operations')
   const operations = await operationsQuery.find()
-  const { $gsap } = useNuxtApp()
+  const { $gsap, $event } = useNuxtApp()
   import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
   $gsap.registerPlugin(ScrollToPlugin)
 
   const isNum = ref(false);
   const code = ref('');
-  const keyPresses = new Map();
-  const lastKeyPressed = ref(null); // Keep track of the last key pressed
 
   const props = defineProps({'isPeeking': Boolean})
   const isPeeking = computed(() => props.isPeeking)
@@ -113,6 +92,9 @@
       activeOperation: operations.find(op => op.id === activeOperationStore.activeOperationId),
       code: code.value,
     }
+  })
+  const activeOperation = computed(() => {
+    return operations.find(op => op.id === activeOperationStore.activeOperationId)
   })
 
   function dialClick() {
@@ -126,8 +108,6 @@
         activeOperationStore.setActiveOperationId(isWithinGeofence.value.id);
         currentScreenComponent.value = locationFound;
         screenTimeoutRef.value = setTimeout(async () => {
-          // const cipherComponent = (await import(`@/components/ciphers/${isWithinGeofence.value.id}.vue`)).default;
-          // currentScreenComponent.value = cipherComponent;
           currentScreenComponent.value = cipher;
         }, 2000);
       } else {
@@ -155,95 +135,20 @@
     return 'off';
   });
 
-  // const currentScreen = computed(() => {
-  //   const activeOperationId = activeOperationStore.activeOperationId;
-
-  //   if (isRelayingLocation.value) {
-  //     return relayLocation;
-  //   }
-
-  //   if (errorMessage.value) {
-  //     return locationNotFound;
-  //   }
-
-  //   if (isWithinGeofence.value && activeOperationId) {
-  //     return import(`./components/ciphers/${activeOperationId}.vue`)
-  //       .then((c) => c.default); // Dynamically import cipher component
-  //   }
-
-  //   return operationsIndex;
-  // });
-
-  // watch(isWithinGeofence, (newValue, oldValue) => {
-  //   if (newValue) {
-  //     console.log(`User is now within geofence: ${newValue.id}`);
-  //     //set active operation to new value id
-  //     activeOperation.value = newValue.id
-
-  //     // Perform actions based on the specific location ID (add your logic here)
-  //     console.log(`Perform actions for location ID: ${newValue.id}`);
-
-  //     // (Optional) Show location found screen for a brief period
-  //     const locationFoundTimeout = setTimeout(() => {
-  //       console.log('Location found screen timed out');
-  //     }, 2000);
-
-  //     // (Optional) Transition to cipher screen after location found timeout
-  //     clearTimeout(resetKeypressesTimeout.value); // Clear any existing timeout
-  //     resetKeypressesTimeout.value = setTimeout(() => {
-  //       clearTimeout(locationFoundTimeout); // Clear location found timeout before transition
-  //     }, 2000);
-  //   } else if (oldValue) {
-  //     console.log(oldValue)
-  //     console.log('User exited the geofence.');
-  //   }
-  // }, { immediate: true });
-
-  const keyMappings = {
-    '1': ['a', 'b', 'c'],
-    '2': ['d', 'e', 'f'],
-    '3': ['g', 'h', 'i'],
-    '4': ['j', 'k', 'l'],
-    '5': ['m', 'n', 'o'],
-    '6': ['p', 'q', 'r'],
-    '7': ['s', 't', 'u'],
-    '8': ['v', 'w', 'x'],
-    '9': ['y', 'z'],
-  };
-
-
-  const handleKeyPress = (key) => {
-    if (isNum.value) {
-      code.value += key;
-    } else {
-      const currentKeyIndex = keyPresses.get(key) || 0;
-      const nextIndex = (currentKeyIndex + 1) % keyMappings[key].length;
-      keyPresses.set(key, nextIndex);
-
-      const character = keyMappings[key][currentKeyIndex];
-
-      if (character) {
-        if (lastKeyPressed.value === key) {
-          // Replace the last character (mutable character) if the same key is pressed
-          code.value = code.value.slice(0, -1) + character;
-        } else {
-          // Add a new character if a different key is pressed or if it's the first character
-          code.value += character;
-        }
+  function handleKeyPress(character, isOverride = false) {
+    // Cap code length based on activeOperation.value.code length
+    if (activeOperation.value && currentScreenComponent.value === cipher){
+      const maxCodeLength = activeOperation.value.code.length;
+      if (code.value.length >= maxCodeLength && !isOverride) {
+        return; // Ignore key press if code is already at max length
+      } else if (isOverride) {
+        code.value = code.value.slice(0, -1) + character;
+        return;
+      } else {
+        code.value += character;
       }
-
-      // Update the last key pressed
-      lastKeyPressed.value = key;
-
-      // Clear existing timeout
-      clearTimeout(resetKeypressesTimeout.value);
-      // Set a new timeout to reset the key presses
-      resetKeypressesTimeout.value = setTimeout(() => {
-        keyPresses.clear();
-        lastKeyPressed.value = null; // Reset the last key pressed
-      }, 800);
     }
-  };
+  }
 
   const handleBackspace = () => {
     // Ensure there's something to backspace
@@ -252,20 +157,19 @@
     }
   };
   const handleEnter = () => {
-    // Perform an action when the enter key is pressed
-    console.log('Enter key pressed');
-    emit('printMission')
-  };
-
-  onMounted(() => {
-    // Start a timer when relaying location
-    if (errorMessage.value) {
-      setTimeout(() => {
-        clearError()
-      }, 4000);
+    if (activeOperation.value && code.value === activeOperation.value.code) {
+      unlockedStore.unlockOperation(activeOperation.value.id);
+      currentScreenComponent.value = missionsPrinting;
+      screenTimeoutRef.value = setTimeout(() => {
+        currentScreenComponent.value = operationsIndex;
+      }, 2000);
+    } else {
+      // If the code is incorrect, clear the code and show the operationsIndex screen
+      code.value = '';
+      $event.$emit('shakeInput');
     }
-  });
-
+  };
+  
   //define emits print-mission
   const emit = defineEmits(['printMission'])
 
@@ -307,7 +211,9 @@
     background-repeat: no-repeat, no-repeat, repeat;
     box-shadow: 0px 0px 40px 0px rgba(255, 255, 255, 0.15) inset;
     display: grid;
-    grid-template-rows: 1fr auto min-content;
+    grid-template-rows: minmax(0, 1fr) auto min-content;
+    min-width: 0px;
+    min-height: 0px;
   }
   .edge {
     grid-row: 2/3;
@@ -341,6 +247,8 @@
     padding: 10px;
     grid-template-columns: 26px 1fr 26px;
     grid-template-rows: 26px 1fr 26px;
+    overflow: hidden;  /* NEW */
+    min-width: 0;
   }
   .screw {
     height: 100%;
@@ -349,14 +257,11 @@
   .screenWrapper {
     grid-row: 1 / 3;
     grid-column: 1 / -1;
-    // background: url('/assets/images/NoiseTextureSeamless.jpg'), #94AE32;
-    // background-blend-mode: multiply, none;
     background-color: #94AE32;
     margin-bottom: 10px;
-    border-radius: 45% 45% 10px 10px;
+    border-radius: 50% 50% 10px 10px / 30% 30% 10px 10px;
     box-shadow: 6px 6px 20px 0px rgba(0, 0, 0, 0.45) inset;
     position: relative;
-    overflow: hidden;
   }
   .noiseOverlay {
     position: absolute;
@@ -476,13 +381,6 @@
     padding: 15px;
     gap: 15px;
   }
-  .keypad {
-    grid-column: 1/2;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 64px;
-    grid-gap: 8px 12px;
-  }
   .rightRail {
     grid-column: 2/3;
     display: grid;
@@ -579,9 +477,7 @@
     pointer-events: none;
   }
   .isPeeking {
-    // transform: translateY(-200px);
     position: relative;
     z-index: 10;
-    // transition-duration: 500ms;
   }
 </style>

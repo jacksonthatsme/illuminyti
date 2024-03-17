@@ -6,7 +6,7 @@
     <device @print-mission="handlePrintMission" :is-peeking="isDevicePeeking"></device>
   </section>
   <section class="missionsSection" id="missions">
-    <missions></missions>
+    <missions ref="missionRef"></missions>
   </section>
 </template>
 
@@ -14,6 +14,7 @@
   const { $gsap, $ScrollToPlugin, $ScrollTrigger } = useNuxtApp()
   $gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
   const deviceRef = ref(null)
+  const missionRef = ref(null)
 
   const isDevicePeeking = ref(false)
 
@@ -37,24 +38,25 @@
   const handleTutorialComplete = () => {
     console.log('hqndleTutorialComplete')
     isDevicePeeking.value = true
-    $gsap.to('.deviceContainer', {y: -200, duration: 2} )
-    $gsap.from('.deviceContainer', {
-              y: -200,
-              scrollTrigger: {
-                scroller: "main",
-                trigger: '#instructions',
-                start: 'bottom bottom',
-                end: 'bottom top',
-                markers: true,
-                scrub: true
-              }
-            }, onComplete => {
-              console.log('onComplete: ', onComplete)
-            }
-            )
+
+    const tl = $gsap.timeline();
+    
+    tl.to('.deviceContainer', {y: -200, duration: 1, ease: 'power2.inOut'})
+    .from('.deviceContainer', { 
+        y: -200,
+        scrollTrigger: {
+          scroller: "main",
+          trigger: '#instructions',
+          start: 'bottom bottom',
+          end: 'bottom top',
+          markers: true,
+          scrub: true
+        }
+      }); // Set stagger to 0 for immediate execution
   }
   const handlePrintMission = () => {
-    $gsap.to('main', 2, {scrollTo: {y:'#missions'}})
+    // $gsap.to('main', 2, {scrollTo: {y:'#missions'}, ease: 'power4.out',})
+    missionRef.value.addDummySlide()
   }
 
 
@@ -63,7 +65,7 @@
 <style lang="scss" scoped>
   section {
     height: 100dvh;
-    width: 100dvw;
+    width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
