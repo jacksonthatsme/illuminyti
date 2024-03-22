@@ -49,7 +49,6 @@
           trigger: '#instructions',
           start: 'bottom bottom',
           end: 'bottom top',
-          markers: true,
           scrub: true
         }
       }); // Set stagger to 0 for immediate execution
@@ -64,11 +63,10 @@
 
 <style lang="scss" scoped>
   section {
-    height: 100dvh;
+    height: 100%;
     width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    overflow:hidden;
   }
   // .fullpage-swiper {
   //   height: 100dvh;

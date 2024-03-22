@@ -1,6 +1,6 @@
 <template>
   <div class="deviceContainer" :class="{'isPeeking': isPeeking}">
-    <div class="wrapper">
+    <div class="deviceWrapper">
       <div class="top">
         <div class="light" :class="{'isOn': lightBulbState === 'on', 
                                     'isOff': lightBulbState === 'off', 
@@ -185,11 +185,12 @@
     overflow-x: hidden;
     overflow-y: visible;
   }
-  .wrapper {
+  .deviceWrapper {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: minmax(40px,60px) 1fr;
+    overflow: hidden;
+    grid-template-rows: minmax(30px,60px) 1fr;
   }
   .top {
     display: flex;

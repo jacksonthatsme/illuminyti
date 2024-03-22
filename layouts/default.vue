@@ -7,8 +7,7 @@
 <style lang="scss" scoped>
 main {
   max-width: 500px;
-  height: 100vh;
-  max-height: 100vh;
+  height: 100dvh;
   margin-right: auto;
   margin-left: auto;
   overflow-y: scroll;

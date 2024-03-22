@@ -47,12 +47,12 @@
       },"+=1")
       typeIn.to(selector, {
         text: 'You have until 6pm. The team with the most points gets',
-        duration: 2, // Adjust duration as needed
+        duration: 1, // Adjust duration as needed
         ease: 'none',
       },">")
       typeIn.to(selector, {
         text: 'You have until 6pm. The team with the most points gets a prize',
-        duration: 2, // Adjust duration as needed
+        duration: 1, // Adjust duration as needed
         ease: 'none',
         onComplete: () => {
           document.querySelector(selector).classList.remove('typing-cursor');
@@ -98,9 +98,6 @@ defineExpose({ buildTypeIn, tutorialDisplay });
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   padding: 12% 6%;
-}
-.tutorialContent {
-  margin-top: 40px;
 }
 
 h1 {
