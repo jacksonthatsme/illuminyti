@@ -2,7 +2,7 @@
   <div class="deviceContainer" :class="{'isPeeking': isPeeking}">
     <div class="deviceWrapper">
       <div class="top">
-        <div class="light" :class="{'isOn': lightBulbState === 'on', 
+        <div class="light" @click="lightClick" :class="{'isOn': lightBulbState === 'on', 
                                     'isOff': lightBulbState === 'off', 
                                     'isBlinking': lightBulbState === 'blinking'}">
           <div class="bulb"></div>
@@ -63,6 +63,7 @@
   import locationNotFound from '~/components/locationNotFound.vue'
   import locationFound from '~/components/locationFound.vue'
   import missionsPrinting from '~/components/missionsPrinting.vue'
+  import cheatCodeInput from '~/components/cheatCodeInput.vue'
   import cipher from  '~/components/cipher.vue'  
   import { useGeofencing } from '~/composables/useGeofencing'
   import { useActiveOperationStore } from '~/stores/activeOperation'
@@ -82,6 +83,7 @@
 
   const isNum = ref(false);
   const code = ref('');
+  const cheatCode = ref(''); 
 
   const props = defineProps({'isPeeking': Boolean})
   const isPeeking = computed(() => props.isPeeking)
@@ -91,6 +93,7 @@
       operations: operations,
       activeOperation: operations.find(op => op.id === activeOperationStore.activeOperationId),
       code: code.value,
+      cheatCode: cheatCode.value,
     }
   })
   const activeOperation = computed(() => {
@@ -99,6 +102,18 @@
 
   function dialClick() {
     isNum.value = !isNum.value
+  }
+  const lightTimeout = ref(null);
+  function lightClick() {
+    if(!lightTimeout.value) {
+      lightTimeout.value = setTimeout(() => {
+      }, 1);//tolerance in ms
+    } else {
+        clearTimeout(lightTimeout.value);
+        lightTimeout.value = null;
+        console.log('light double clicked');
+        currentScreenComponent.value = cheatCodeInput;
+    }
   }
 
   async function handleRelayLocation() {
@@ -123,20 +138,24 @@
     if (isRelayingLocation.value) {
       return 'blinking';
     }
-
     if (errorMessage.value) {
       return 'off';
     }
-
     if (isWithinGeofence.value) {
       return 'on';
     }
-
     return 'off';
   });
 
   function handleKeyPress(character, isOverride = false) {
-    // Cap code length based on activeOperation.value.code length
+    if (currentScreenComponent.value === cheatCodeInput) {
+      if (!isNum.value) {
+        $event.$emit('shakeInput');
+        return;
+      } else {
+        cheatCode.value += character;
+      }
+    }
     if (activeOperation.value && currentScreenComponent.value === cipher){
       const maxCodeLength = activeOperation.value.code.length;
       if (code.value.length >= maxCodeLength && !isOverride) {
@@ -157,6 +176,23 @@
     }
   };
   const handleEnter = () => {
+    if (currentScreenComponent.value === cheatCodeInput) {
+      console.log(operations[1]['cheat-code']);
+            
+      // Find the operation ID for the matching cheat code
+      const matchingOperationId = operations.find(operation => operation['cheat-code'] == cheatCode.value)?.id;
+
+      if (matchingOperationId) {
+        activeOperationStore.setActiveOperationId(matchingOperationId);
+        currentScreenComponent.value = locationFound;
+        screenTimeoutRef.value = setTimeout(async () => {
+          currentScreenComponent.value = cipher;
+        }, 2000);
+      } else {
+        cheatCode.value = '';
+        $event.$emit('shakeInput');
+      }
+    }
     if (activeOperation.value && code.value === activeOperation.value.code) {
       unlockedStore.unlockOperation(activeOperation.value.id);
       currentScreenComponent.value = missionsPrinting;
@@ -190,7 +226,7 @@
     height: 100%;
     display: grid;
     overflow: hidden;
-    grid-template-rows: minmax(30px,60px) 1fr;
+    grid-template-rows: minmax(20px,40px) 1fr;
   }
   .top {
     display: flex;

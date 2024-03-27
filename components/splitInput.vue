@@ -102,12 +102,13 @@
   border-width: 0px 0px 3px 0px;
   border-color: #5E5940;
   text-align: center;
-  font-size: 30px;
+  font-size: 26px;
   line-height: 40px;
   text-transform: uppercase;
   font-family: 'Dotbit';
   font-weight: 500;
   user-select: none;
+  padding: 0px;
   pointer-events: none;
 }
 </style>

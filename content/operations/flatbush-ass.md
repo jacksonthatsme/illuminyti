@@ -1,12 +1,13 @@
 ---
 name: Flatbush Ass
 code: kirby
+cheat-code: 11111
 polygon:
-  - { latitude: 40.6792753, longitude: -73.9737126 }
-  - { latitude: 40.6792357, longitude: -73.9738172 }
-  - { latitude: 40.6789582, longitude: -73.9736509 }
-  - { latitude: 40.6790141, longitude: -73.9735021 }
-  - { latitude: 40.6792753, longitude: -73.9737126 }
+  - { latitude: 40.67917, longitude: -73.97372 }
+  - { latitude: 40.67930, longitude: -73.97338 }
+  - { latitude: 40.67922, longitude: -73.97332 }
+  - { latitude: 40.67909, longitude: -73.97367 }
+  - { latitude: 40.67917, longitude: -73.97372 }
 id: f-b-a
 hidden: false
 missions:

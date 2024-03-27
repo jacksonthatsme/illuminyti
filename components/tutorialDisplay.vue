@@ -101,8 +101,8 @@ defineExpose({ buildTypeIn, tutorialDisplay });
 }
 
 h1 {
-  font-size: 30px;
-  line-height: 40px;
+  font-size: 24px;
+  line-height: 30px;
   letter-spacing: .1rem;
 }
 h2 {

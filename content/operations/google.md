@@ -1,15 +1,15 @@
 ---
-name: Mark Twain Plaque
-code: animals
-id: m-t-p
-cheat-code: 76839
+name: Google
+code: lab
+cheat-code: 78906
+id: g-c-l
 hidden: false
 polygon:
-  - { latitude: 40.7338414, longitude: -73.9964592 }
-  - { latitude: 40.7337479, longitude: -73.9965289 }
-  - { latitude: 40.7336768, longitude: -73.9963358 }
-  - { latitude: 40.7337723, longitude: -73.9962741 }
-  - { latitude: 40.7338414, longitude: -73.9964592 }
+  - { latitude: 40.74230, longitude: -74.00435 }
+  - { latitude: 40.74117, longitude: -74.00155 }
+  - { latitude: 40.74037, longitude: -74.00207 }
+  - { latitude: 40.74163, longitude: -74.00491 }
+  - { latitude: 40.74230, longitude: -74.00435 }
 missions:
   - points: 1
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-This is the clue that points you towards Mark Twains Plaque
+This is the clue that points you towards Google Creative Lab

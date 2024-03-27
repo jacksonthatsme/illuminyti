@@ -1,15 +1,14 @@
 ---
-name: Mark Twain Plaque
-code: animals
-id: m-t-p
-cheat-code: 76839
+name: Donut Plant
+code: donuts
+cheat-code: 54392
+id: d-n-p
 hidden: false
 polygon:
-  - { latitude: 40.7338414, longitude: -73.9964592 }
-  - { latitude: 40.7337479, longitude: -73.9965289 }
-  - { latitude: 40.7336768, longitude: -73.9963358 }
-  - { latitude: 40.7337723, longitude: -73.9962741 }
-  - { latitude: 40.7338414, longitude: -73.9964592 }
+  - { latitude: 40.68081, longitude: -73.97502 }
+  - { latitude: 40.68071, longitude: -73.97455 }
+  - { latitude: 40.68036, longitude: -73.97469 }
+  - { latitude: 40.68081, longitude: -73.97502 }
 missions:
   - points: 1
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
@@ -19,4 +18,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-This is the clue that points you towards Mark Twains Plaque
+This is the clue that points you towards the Bergen 2/3
