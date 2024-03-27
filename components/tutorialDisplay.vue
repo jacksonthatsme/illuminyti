@@ -101,13 +101,13 @@ defineExpose({ buildTypeIn, tutorialDisplay });
 }
 
 h1 {
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 22px;
+  line-height: 28px;
   letter-spacing: .1rem;
 }
 h2 {
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 18px;
+  line-height: 26px;
   letter-spacing: .1rem;
 }
 .tutorialImage {
@@ -117,8 +117,8 @@ h2 {
 
 .tutorialAction {
   grid-row: 4/-1;
-  font-size: 28px;
-  line-height: 36px;
+  font-size: 22px;
+  line-height: 28px;
   letter-spacing: .1rem;
 }
 .typing-cursor::after {
