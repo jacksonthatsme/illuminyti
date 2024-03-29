@@ -1,6 +1,6 @@
 <template>
   <div class="missionsSection">
-    <div class="edge" @click="addSlide">
+    <div class="edge">
       <div class="printSlotOuter">
         <div class="printSlotInner"></div>
       </div>
@@ -77,7 +77,6 @@
   });
 
   watch(unlockedStore, () => {
-    watch(unlockedStore, () => {
     const newUnlockedOperations = unlockedStore.unlockedOperations.filter(
       (id) => !slides.value.some((slide) => slide.id === id)
     ); // Filter new unlocked operations
@@ -88,7 +87,6 @@
         addSlide(newSlide);
       }
     });
-  });
   });
 
   function setSlides() {

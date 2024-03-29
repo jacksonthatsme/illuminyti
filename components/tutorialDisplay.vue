@@ -113,6 +113,7 @@ h2 {
 .tutorialImage {
   grid-row: 1/2;
   height: 80px;
+  margin-bottom: 20px;
 }
 
 .tutorialAction {
@@ -124,7 +125,7 @@ h2 {
 .typing-cursor::after {
   content: '';
   display: inline-block;
-  height: 22px;
+  height: 16px;
   width: 12px;
   background-color: #00E593;
   opacity: 1;

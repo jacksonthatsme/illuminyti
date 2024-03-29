@@ -177,7 +177,6 @@
   };
   const handleEnter = () => {
     if (currentScreenComponent.value === cheatCodeInput) {
-      console.log(operations[1]['cheat-code']);
             
       // Find the operation ID for the matching cheat code
       const matchingOperationId = operations.find(operation => operation['cheat-code'] == cheatCode.value)?.id;
@@ -263,11 +262,12 @@
   }
   .battery {
     flex: 1;
-    max-width: 220px;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
     img {
-      max-width:100%;
+      height: 100%;
       display: block;
-      align-self: center;
     }
   }
   .screenContainer {
