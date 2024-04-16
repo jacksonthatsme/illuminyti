@@ -1,9 +1,9 @@
 ---
 name: Donut Plant
 code: donuts
-cheat-code: 54392
+cheat-code: 33333
 id: d-n-p
-hidden: false
+hidden: true
 polygon:
   - { latitude: 40.68081, longitude: -73.97502 }
   - { latitude: 40.68071, longitude: -73.97455 }

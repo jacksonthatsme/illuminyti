@@ -76,6 +76,8 @@
 
   const operationsQuery = queryContent('operations')
   const operations = await operationsQuery.find()
+  //operations filtered by hidden property
+  const filteredOperations = operations.filter(operation => !operation.hidden)
   const { $gsap, $event } = useNuxtApp()
   import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
@@ -88,9 +90,10 @@
   const props = defineProps({'isPeeking': Boolean})
   const isPeeking = computed(() => props.isPeeking)
 
+
   const screenData = computed(() => {
     return {
-      operations: operations,
+      operations: filteredOperations,
       activeOperation: operations.find(op => op.id === activeOperationStore.activeOperationId),
       code: code.value,
       cheatCode: cheatCode.value,
@@ -268,6 +271,7 @@
     img {
       height: 100%;
       display: block;
+      max-width: 220px;
     }
   }
   .screenContainer {

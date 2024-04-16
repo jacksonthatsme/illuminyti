@@ -3,7 +3,7 @@
     <instructions @tutorial-complete="handleTutorialComplete"></instructions>
   </section>
   <section class="deviceSection" id="device">
-    <device @print-mission="handlePrintMission" :is-peeking="isDevicePeeking"></device>
+    <device :is-peeking="isDevicePeeking" ref="deviceRef"></device>
   </section>
   <section class="missionsSection" id="missions">
     <missions ref="missionRef"></missions>
@@ -18,46 +18,42 @@
 
   const isDevicePeeking = ref(false)
 
-  // onMounted(() => {
-  //   $gsap.from('.deviceContainer', {
-  //             y: 0,
-  //             scrollTrigger: {
-  //               scroller: "main",
-  //               trigger: '#instructions',
-  //               start: 'bottom bottom',
-  //               end: 'bottom top',
-  //               markers: true,
-  //               scrub: true
-  //             }
-  //           }, onComplete => {
-  //             console.log('onComplete: ', onComplete)
-  //           }
-  //           )
-  // })
 
   const handleTutorialComplete = () => {
-    console.log('hqndleTutorialComplete')
+    console.log('handleTutorialComplete')
     isDevicePeeking.value = true
+  }
 
-    const tl = $gsap.timeline();
-    
-    tl.to('.deviceContainer', {y: -200, duration: 1, ease: 'power2.inOut'})
-    .from('.deviceContainer', { 
-        y: -200,
-        scrollTrigger: {
-          scroller: "main",
-          trigger: '#instructions',
-          start: 'bottom bottom',
-          end: 'bottom top',
-          scrub: true
+  watch(isDevicePeeking, (newVal) => {
+    if (newVal) {
+      console.log('Device is peeking:', newVal);
+
+      // First animate the device to its final position
+      $gsap.to('.deviceContainer', {
+        y: -240,
+        duration: 1.5,
+        delay: 2,
+        ease: 'power4.out',
+        onComplete: () => {
+          console.log('Device is in final position');
+          // Create and configure the GSAP timeline after the animation completes
+          const tl = $gsap.timeline({
+            scrollTrigger: {
+              scroller: "main",
+              trigger: '#instructions',
+              start: 'bottom bottom',
+              end: 'bottom top',
+              scrub: true,
+              markers: false  // Enable markers for debugging
+            }
+          });
+
+          // Set the scrubbing animation
+          tl.fromTo('.deviceContainer', { y: -240 }, { y: 0 });
         }
-      }); // Set stagger to 0 for immediate execution
-  }
-  const handlePrintMission = () => {
-    // $gsap.to('main', 2, {scrollTo: {y:'#missions'}, ease: 'power4.out',})
-    missionRef.value.addDummySlide()
-  }
-
+      });
+    }
+  });
 
 </script>
 
@@ -68,9 +64,4 @@
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
-  // .fullpage-swiper {
-  //   height: 100dvh;
-  //   width: 100dvw;
-  //   max-width: 500px;
-  // }
 </style>

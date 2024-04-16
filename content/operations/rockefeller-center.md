@@ -1,9 +1,9 @@
 ---
-name: Google
-code: lab
+name: Rockefeller Center
+code: wisdom
 cheat-code: 66666
-id: g-c-l
-hidden: true
+id: r-f-c
+hidden: false
 polygon:
   - { latitude: 40.74230, longitude: -74.00435 }
   - { latitude: 40.74117, longitude: -74.00155 }
@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-This is the clue that points you towards Google Creative Lab
+Sitting in relief, find wisdom, watching over prometheus

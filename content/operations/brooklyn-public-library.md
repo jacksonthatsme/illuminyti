@@ -1,7 +1,7 @@
 ---
 name: Brooklyn Public Library
 code: animals
-cheat-code: 98476
+cheat-code: 22222
 id: b-p-l
 hidden: false
 polygon:
