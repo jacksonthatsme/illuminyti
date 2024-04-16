@@ -11,7 +11,7 @@ import { computed } from 'vue';
 // You might choose this based on an API call or logged-in status
 const layout = computed(() => {
   if(process.env.NODE_ENV === "development") {
-    return 'default'
+    return 'install'
   } else if (device.isInstalled) {
     return 'default'
   } else {

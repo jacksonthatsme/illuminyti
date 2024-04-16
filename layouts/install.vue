@@ -4,10 +4,12 @@
     <img src="/assets/images/Envelope[Layer2].png" class="envelopeLid" alt="Envelope Lid" />
     <img src="/images/install/emblem.svg" class="emblem" alt="Emblem" />
     <h1 class="envelopeTitle">Download the app to begin</h1>
-    <div class="evelopeButton" v-if="$pwa?.showInstallPrompt">
-      Install
+    <div class="envelopeAction">
+      <div class="evelopeButton" v-if="$pwa?.showInstallPrompt">
+        Install
+      </div>
+      <h2 v-if="!$pwa?.showInstallPrompt" class="envelopeSubtitle">Scroll for <br/> instructions</h2>
     </div>
-    <h2 v-if="!$pwa?.showInstallPrompt" class="envelopeSubtitle">Scroll for <br/> instructions</h2>
   </div>
   <div class="instructionsContainer" v-if="!$pwa?.showInstallPrompt">
     <h1 class="instructionsTitle">Instructions</h1>
@@ -58,27 +60,30 @@
     width: 100dvw;
     background: url('/assets/images/Envelope[Layer1].png');
     background-size: 100% 100%;
-    display: grid;
-    grid-template-rows: auto 1fr auto 1fr;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; /* Margin at the bottom */
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     z-index: -1;
+    color: #242424;
+    min-width: 0;
+    min-height: 0;
   }
 
   .envelopeLid {
     width: 100%;
-    grid-row: 1/2;
     -webkit-filter: drop-shadow(-5px 2px 2px rgba(0, 0, 0, .2));
     filter: drop-shadow(-5px 2px 2px rgba(0, 0, 0, .2));
   }
   .emblem {
-    grid-row: 2/3;
     padding: 10vw;
-    width: 100%;
-    height: 100%;
+    flex-shrink: 1;
+    flex-grow: 0;
+    min-height: 0;
   }
 
   .envelopeTitle {
@@ -88,7 +93,6 @@
     letter-spacing: 1px;
     font-size: 30px;
     text-align: center;
-    grid-row: 3/4;
     padding: 0 10vw;
   }
 
@@ -97,11 +101,12 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-size: 18px;
+    font-size: 14px;
     text-align: center;
-    grid-row: 4/5;
-    align-self: end;
-    padding: 0 10vw 80px 10vw;
+  }
+
+  .envelopeAction {
+    padding: 80px 10vw;
   }
   .instructionsTitle {
     font-family: 'Eurostile';
