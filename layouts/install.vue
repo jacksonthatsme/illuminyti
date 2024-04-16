@@ -5,7 +5,7 @@
     <img src="/images/install/emblem.svg" class="emblem" alt="Emblem" />
     <h1 class="envelopeTitle">Download the app to begin</h1>
     <div class="envelopeAction">
-      <div class="evelopeButton" v-if="$pwa?.showInstallPrompt">
+      <div v-if="$pwa?.showInstallPrompt" class="evelopeButton" @click="$pwa.install()">
         Install
       </div>
       <h2 v-if="!$pwa?.showInstallPrompt" class="envelopeSubtitle">Scroll for <br/> instructions</h2>
@@ -74,6 +74,22 @@
     min-height: 0;
   }
 
+  .evelopeButton {
+    border: #B40000 4px solid;
+    color: #B40000;
+    font-family: 'Eurostile';
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 20px;
+    padding: 20px 16px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    transform: rotate(-5deg);
+  }
+
   .envelopeLid {
     width: 100%;
     -webkit-filter: drop-shadow(-5px 2px 2px rgba(0, 0, 0, .2));
@@ -84,6 +100,7 @@
     flex-shrink: 1;
     flex-grow: 0;
     min-height: 0;
+    mix-blend-mode: multiply;
   }
 
   .envelopeTitle {
@@ -107,6 +124,9 @@
 
   .envelopeAction {
     padding: 80px 10vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .instructionsTitle {
     font-family: 'Eurostile';

@@ -13,9 +13,8 @@
     <div class="loadingWrapper">
       <img src="/images/tutorial/loadingGraphic.png" alt="" class="loadingImage" @click="skipTutorial">
       <div class="loadingContainer">
-        <div class="loadingBar">
-          <div class="loadingProgress">100</div>
-        </div>
+        <div class="loadingBar"></div>
+        <div class="loadingProgress"><span class="progressOutput">100</span>%</div>
       </div>
       <h1 class="loadingLabel">Starting program</h1>
     </div>
@@ -56,15 +55,15 @@
 
     $gsap.to('.loadingBar', {
       width: '100%',
-      duration: 3,
+      duration: 10,
       ease: 'steps(20)',
       onComplete: () => {
         swiper.value.slideNext()
       }
     })
-    $gsap.from('.loadingProgress', {
+    $gsap.from('.progressOutput', {
       textContent: 0,
-      duration: 3,
+      duration: 10,
       ease: 'steps(25)',
       snap: { textContent: 1 },
     })
@@ -87,6 +86,7 @@ const skipTutorial = () => {
   border: 3px solid #00E593;
   padding: 3px;
   overflow: hidden;
+  position: relative;
 }
 .loadingWrapper {
   display: flex;
@@ -123,6 +123,14 @@ const skipTutorial = () => {
   text-transform: uppercase;
   font-size: 28px;
   letter-spacing: 2px;
-  padding: 0px 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4
 }
 </style>
