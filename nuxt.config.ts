@@ -50,6 +50,12 @@ export default defineNuxtConfig({
     workbox: {
       navigateFallback: '/',
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      runtimeCaching: [
+        {
+          urlPattern: 'https://illuminyti.nyc/api/content/.*',
+          handler: 'StaleWhileRevalidate'
+        }
+      ]
     },
     client: {
       installPrompt: true,
