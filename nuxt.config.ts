@@ -52,10 +52,36 @@ export default defineNuxtConfig({
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       runtimeCaching: [
         {
-          urlPattern: 'https://illuminyti.nyc/api/content/.*',
-          handler: 'StaleWhileRevalidate'
+          urlPattern: '/api/content/operations/.*', // Adjust the URL pattern to match your content API
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'operations-cache',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: '/api/content/tutorials/.*', // Adjust the URL pattern to match your content API
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'tutorials-cache',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
         }
-      ]
+      ],
+      skipWaiting: true,
+      clientsClaim: true,
     },
     client: {
       installPrompt: true,
