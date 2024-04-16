@@ -58,6 +58,17 @@
           document.querySelector(selector).classList.remove('typing-cursor');
         }
       },">")
+    } if (content.tag == 'h2') {
+      typeIn.to(selector, {
+        onStart: () => {
+          document.querySelector(selector).classList.add('typing-cursor');
+        },
+        text: content.text,
+        duration: content.text.length * 0.05, // Adjust duration as needed
+        onComplete: () => {
+          document.querySelector(selector).classList.remove('typing-cursor');
+        }
+      },"+=1");
     } else {
       typeIn.to(selector, {
         onStart: () => {
@@ -80,7 +91,7 @@
     onComplete: () => {
       document.querySelector(`#cta-${props.index}`).classList.remove('typing-cursor');
     }
-    }, "+=1");
+    }, "+=.5");
 })
 const buildTypeIn = () => {
   typeIn.play();

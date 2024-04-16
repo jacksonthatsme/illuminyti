@@ -14,7 +14,7 @@
       <img src="/images/tutorial/loadingGraphic.png" alt="" class="loadingImage" @click="skipTutorial">
       <div class="loadingContainer">
         <div class="loadingBar"></div>
-        <div class="loadingProgress"><span class="progressOutput">100</span>%</div>
+        <div class="loadingProgress"><span class="progressOutput">0</span>%</div>
       </div>
       <h1 class="loadingLabel">Starting program</h1>
     </div>
@@ -61,10 +61,10 @@
         swiper.value.slideNext()
       }
     })
-    $gsap.from('.progressOutput', {
-      textContent: 0,
+    $gsap.to('.progressOutput', {
+      textContent: 100,
       duration: 10,
-      ease: 'steps(25)',
+      ease: 'steps(27)',
       snap: { textContent: 1 },
     })
 
