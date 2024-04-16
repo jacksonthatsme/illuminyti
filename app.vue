@@ -15,7 +15,7 @@ const layout = computed(() => {
   } else if (device.isInstalled) {
     return 'default'
   } else {
-    return 'default'
+    return 'install'
   }
 })
 
