@@ -49,7 +49,7 @@
         text: 'You have until 6pm. The team with the most points gets',
         duration: 1, // Adjust duration as needed
         ease: 'none',
-      },">")
+      },"+=.5")
       typeIn.to(selector, {
         text: 'You have until 6pm. The team with the most points gets a prize',
         duration: 1, // Adjust duration as needed
@@ -57,7 +57,7 @@
         onComplete: () => {
           document.querySelector(selector).classList.remove('typing-cursor');
         }
-      },">")
+      },"+=.5")
     } if (content.tag == 'h2') {
       typeIn.to(selector, {
         onStart: () => {

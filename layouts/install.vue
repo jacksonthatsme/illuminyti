@@ -123,7 +123,7 @@
   }
 
   .envelopeAction {
-    padding: 80px 10vw;
+    padding: 40px 10vw;
     display: flex;
     justify-content: center;
     align-items: center;

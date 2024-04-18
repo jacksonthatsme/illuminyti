@@ -9,7 +9,7 @@
           <div class="base"></div>
           <div class="glow"></div>
         </div>
-        <div class="battery">
+        <div class="battery" @click="batteryClick">
           <img src="/images/transciever/BatteryCoil.png" />
         </div>
       </div>
@@ -74,6 +74,7 @@
   const currentScreenComponent = shallowRef(operationsIndex); // Default screen
   const screenTimeoutRef = ref(null); // To manage screen transition timeouts
 
+
   const operationsQuery = queryContent('operations')
   const operations = await operationsQuery.find()
   //operations filtered by hidden property
@@ -114,8 +115,18 @@
     } else {
         clearTimeout(lightTimeout.value);
         lightTimeout.value = null;
-        console.log('light double clicked');
         currentScreenComponent.value = cheatCodeInput;
+    }
+  }
+  const batteryTimeout = ref(null);
+  function batteryClick() {
+    if(!batteryTimeout.value) {
+      batteryTimeout.value = setTimeout(() => {
+      }, 1);//tolerance in ms
+    } else {
+        clearTimeout(batteryTimeout.value);
+        batteryTimeout.value = null;
+        currentScreenComponent.value = operationsIndex;
     }
   }
 

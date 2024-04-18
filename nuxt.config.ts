@@ -52,7 +52,7 @@ export default defineNuxtConfig({
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       runtimeCaching: [
         {
-          urlPattern: '/api/_content/operations/.*', // Adjust the URL pattern to match your content API
+          urlPattern: '/api/_content/operations/*', // Adjust the URL pattern to match your content API
           handler: 'StaleWhileRevalidate',
           options: {
             cacheName: 'operations-cache',
@@ -66,7 +66,7 @@ export default defineNuxtConfig({
           }
         },
         {
-          urlPattern: '/api/_content/tutorials/.*', // Adjust the URL pattern to match your content API
+          urlPattern: '/api/_content/tutorial/*', // Adjust the URL pattern to match your content API
           handler: 'StaleWhileRevalidate',
           options: {
             cacheName: 'tutorials-cache',
