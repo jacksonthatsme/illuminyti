@@ -57,173 +57,168 @@
 </template>
 
 <script setup>
-  import { ref, shallowRef } from 'vue'
-  import operationsIndex from '~/components/operationsIndex.vue'
-  import relayLocation from '~/components/relayLocation.vue'
-  import locationNotFound from '~/components/locationNotFound.vue'
-  import locationFound from '~/components/locationFound.vue'
-  import missionsPrinting from '~/components/missionsPrinting.vue'
-  import cheatCodeInput from '~/components/cheatCodeInput.vue'
-  import cipher from  '~/components/cipher.vue'  
-  import { useGeofencing } from '~/composables/useGeofencing'
-  import { useActiveOperationStore } from '~/stores/activeOperation'
-  
-  const activeOperationStore = useActiveOperationStore();
-  const unlockedStore = useUnlockedStore(); // Access the Pinia store
-  const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing()
-  const currentScreenComponent = shallowRef(operationsIndex); // Default screen
-  const screenTimeoutRef = ref(null); // To manage screen transition timeouts
+import { ref, shallowRef, computed, onMounted, watch } from 'vue'
+import { useGeofencing } from '~/composables/useGeofencing'
+import { useActiveOperationStore } from '~/stores/activeOperation'
+import { useUnlockedStore } from '~/stores/unlocked'
+import operationsIndex from '~/components/operationsIndex.vue'
+import relayLocation from '~/components/relayLocation.vue'
+import locationNotFound from '~/components/locationNotFound.vue'
+import locationFound from '~/components/locationFound.vue'
+import missionsPrinting from '~/components/missionsPrinting.vue'
+import cheatCodeInput from '~/components/cheatCodeInput.vue'
+import cipher from '~/components/cipher.vue'
 
+// Reactive state variables
+const operations = ref([])
+const isNum = ref(false)
+const code = ref('')
+const cheatCode = ref('')
+const currentScreenComponent = shallowRef(operationsIndex)
+const screenTimeoutRef = ref(null)
 
+// Store hooks
+const activeOperationStore = useActiveOperationStore()
+const unlockedStore = useUnlockedStore()
+const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing()
+
+// Props
+const props = defineProps({
+  'isPeeking': Boolean
+})
+const isPeeking = computed(() => props.isPeeking)
+
+// Fetch operations on component mount
+onMounted(async () => {
   const operationsQuery = queryContent('operations')
-  const operations = await operationsQuery.find()
-  //operations filtered by hidden property
-  const filteredOperations = operations.filter(operation => !operation.hidden)
-  const { $gsap, $event } = useNuxtApp()
-  import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+  operations.value = await operationsQuery.find().then(ops => ops.filter(op => !op.hidden))
+})
 
-  $gsap.registerPlugin(ScrollToPlugin)
+// Computed properties
+const filteredOperations = computed(() => operations.value)
+const activeOperation = computed(() => operations.value.find(op => op.id === activeOperationStore.activeOperationId))
 
-  const isNum = ref(false);
-  const code = ref('');
-  const cheatCode = ref(''); 
+const screenData = computed(() => ({
+  operations: filteredOperations.value,
+  activeOperation: activeOperation.value,
+  code: code.value,
+  cheatCode: cheatCode.value,
+}))
 
-  const props = defineProps({'isPeeking': Boolean})
-  const isPeeking = computed(() => props.isPeeking)
-
-
-  const screenData = computed(() => {
-    return {
-      operations: filteredOperations,
-      activeOperation: operations.find(op => op.id === activeOperationStore.activeOperationId),
-      code: code.value,
-      cheatCode: cheatCode.value,
-    }
-  })
-  const activeOperation = computed(() => {
-    return operations.find(op => op.id === activeOperationStore.activeOperationId)
-  })
-
-  function dialClick() {
-    isNum.value = !isNum.value
+const lightBulbState = computed(() => {
+  if (isRelayingLocation.value) {
+    return 'blinking';
   }
-  const lightTimeout = ref(null);
-  function lightClick() {
-    if(!lightTimeout.value) {
-      lightTimeout.value = setTimeout(() => {
-      }, 1);//tolerance in ms
-    } else {
-        clearTimeout(lightTimeout.value);
-        lightTimeout.value = null;
-        currentScreenComponent.value = cheatCodeInput;
-    }
-  }
-  const batteryTimeout = ref(null);
-  function batteryClick() {
-    if(!batteryTimeout.value) {
-      batteryTimeout.value = setTimeout(() => {
-      }, 1);//tolerance in ms
-    } else {
-        clearTimeout(batteryTimeout.value);
-        batteryTimeout.value = null;
-        currentScreenComponent.value = operationsIndex;
-    }
-  }
-
-  async function handleRelayLocation() {
-    currentScreenComponent.value = relayLocation;
-    await checkLocation().then(async () => { // Make sure this function waits for checkLocation to finish
-      if (isWithinGeofence.value) {
-        activeOperationStore.setActiveOperationId(isWithinGeofence.value.id);
-        currentScreenComponent.value = locationFound;
-        screenTimeoutRef.value = setTimeout(async () => {
-          currentScreenComponent.value = cipher;
-        }, 2000);
-      } else {
-        currentScreenComponent.value = locationNotFound;
-        screenTimeoutRef.value = setTimeout(() => {
-          currentScreenComponent.value = operationsIndex;
-        }, 2000);
-      }
-    });
-  }
-
-  const lightBulbState = computed(() => {
-    if (isRelayingLocation.value) {
-      return 'blinking';
-    }
-    if (errorMessage.value) {
-      return 'off';
-    }
-    if (isWithinGeofence.value) {
-      return 'on';
-    }
+  if (errorMessage.value) {
     return 'off';
-  });
-
-  function handleKeyPress(character, isOverride = false) {
-    if (currentScreenComponent.value === cheatCodeInput) {
-      if (!isNum.value) {
-        $event.$emit('shakeInput');
-        return;
-      } else {
-        cheatCode.value += character;
-      }
-    }
-    if (activeOperation.value && currentScreenComponent.value === cipher){
-      const maxCodeLength = activeOperation.value.code.length;
-      if (code.value.length >= maxCodeLength && !isOverride) {
-        return; // Ignore key press if code is already at max length
-      } else if (isOverride) {
-        code.value = code.value.slice(0, -1) + character;
-        return;
-      } else {
-        code.value += character;
-      }
-    }
   }
+  if (isWithinGeofence.value) {
+    return 'on';
+  }
+  return 'off';
+});
 
-  const handleBackspace = () => {
-    // Ensure there's something to backspace
-    if (code.value.length > 0) {
-      code.value = code.value.slice(0, -1); // Remove the last character
-    }
-  };
-  const handleEnter = () => {
-    if (currentScreenComponent.value === cheatCodeInput) {
-            
-      // Find the operation ID for the matching cheat code
-      const matchingOperationId = operations.find(operation => operation['cheat-code'] == cheatCode.value)?.id;
+// Methods
+function dialClick() {
+  isNum.value = !isNum.value;
+}
 
-      if (matchingOperationId) {
-        activeOperationStore.setActiveOperationId(matchingOperationId);
-        currentScreenComponent.value = locationFound;
-        screenTimeoutRef.value = setTimeout(async () => {
-          currentScreenComponent.value = cipher;
-        }, 2000);
-      } else {
-        cheatCode.value = '';
-        $event.$emit('shakeInput');
-      }
-    }
-    if (activeOperation.value && code.value === activeOperation.value.code) {
-      unlockedStore.unlockOperation(activeOperation.value.id);
-      currentScreenComponent.value = missionsPrinting;
-      screenTimeoutRef.value = setTimeout(() => {
-        currentScreenComponent.value = operationsIndex;
-        activeOperationStore.setActiveOperationId(null);
+function lightClick() {
+  if (lightTimeout.value) {
+    clearTimeout(lightTimeout.value);
+    lightTimeout.value = null;
+    currentScreenComponent.value = cheatCodeInput;
+  } else {
+    lightTimeout.value = setTimeout(() => {}, 1);  // Set timeout for toggling the light
+  }
+}
+
+function batteryClick() {
+  if (batteryTimeout.value) {
+    clearTimeout(batteryTimeout.value);
+    batteryTimeout.value = null;
+    currentScreenComponent.value = operationsIndex;
+  } else {
+    batteryTimeout.value = setTimeout(() => {}, 1);  // Set timeout for battery logic
+  }
+}
+
+async function handleRelayLocation() {
+  currentScreenComponent.value = relayLocation;
+  await checkLocation().then(async () => {
+    if (isWithinGeofence.value) {
+      activeOperationStore.setActiveOperationId(isWithinGeofence.value.id);
+      currentScreenComponent.value = locationFound;
+      screenTimeoutRef.value = setTimeout(async () => {
+        currentScreenComponent.value = cipher;
       }, 2000);
     } else {
-      // If the code is incorrect, clear the code and show the operationsIndex screen
-      code.value = '';
+      currentScreenComponent.value = locationNotFound;
+      screenTimeoutRef.value = setTimeout(() => {
+        currentScreenComponent.value = operationsIndex;
+      }, 2000);
+    }
+  });
+}
+
+function handleKeyPress(character, isOverride = false) {
+  if (currentScreenComponent.value === cheatCodeInput) {
+    if (!isNum.value) {
+      $event.$emit('shakeInput');
+      return;
+    } else {
+      cheatCode.value += character;
+    }
+  }
+  if (activeOperation.value && currentScreenComponent.value === cipher) {
+    const maxCodeLength = activeOperation.value.code.length;
+    if (code.value.length >= maxCodeLength && !isOverride) {
+      return; // Ignore key press if code is already at max length
+    } else if (isOverride) {
+      code.value = code.value.slice(0, -1) + character;
+    } else {
+      code.value += character;
+    }
+  }
+}
+
+const handleBackspace = () => {
+  if (code.value.length > 0) {
+    code.value = code.value.slice(0, -1); // Remove the last character
+  }
+};
+
+const handleEnter = () => {
+  if (currentScreenComponent.value === cheatCodeInput) {
+    const matchingOperationId = operations.value.find(operation => operation['cheat-code'] === cheatCode.value)?.id;
+    if (matchingOperationId) {
+      activeOperationStore.setActiveOperationId(matchingOperationId);
+      currentScreenComponent.value = locationFound;
+      screenTimeoutRef.value = setTimeout(async () => {
+        currentScreenComponent.value = cipher;
+      }, 2000);
+    } else {
+      cheatCode.value = '';
       $event.$emit('shakeInput');
     }
-  };
-  
-  //define emits print-mission
-  const emit = defineEmits(['printMission'])
+  }
+  if (activeOperation.value && code.value === activeOperation.value.code) {
+    unlockedStore.unlockOperation(activeOperation.value.id);
+    currentScreenComponent.value = missionsPrinting;
+    screenTimeoutRef.value = setTimeout(() => {
+      currentScreenComponent.value = operationsIndex;
+      activeOperationStore.setActiveOperationId(null);
+    }, 2000);
+  } else {
+    code.value = '';
+    $event.$emit('shakeInput');
+  }
+};
 
+// Define event emitters
+// const emit = defineEmits(['shakeInput', 'printMission'])
 </script>
+
 
 
 <style lang="scss" scoped>
