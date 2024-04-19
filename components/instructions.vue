@@ -1,76 +1,95 @@
 <template>
   <Swiper 
-  @swiper="getSwiperRef"
-  class="instructionsContainer"
-  :slides-per-view="1"
-  :modules="[SwiperEffectFade]"
-  :effect="'fade'"
-  :speed="0"
-  :allowTouchMove="false"
-  :fadeEffect="{crossFade: true}"
+    @swiper="getSwiperRef"
+    class="instructionsContainer"
+    :slides-per-view="1"
+    :modules="[SwiperEffectFade]"
+    :effect="'fade'"
+    :speed="0"
+    :allowTouchMove="false"
+    :fadeEffect="{crossFade: true}"
   >
-  <SwiperSlide>
-    <div class="loadingWrapper">
-      <img src="/images/tutorial/loadingGraphic.png" alt="" class="loadingImage" @click="skipTutorial">
-      <div class="loadingContainer">
-        <div class="loadingBar"></div>
-        <div class="loadingProgress"><span class="progressOutput">0</span>%</div>
+    <SwiperSlide>
+      <div class="loadingWrapper">
+        <img src="/images/tutorial/loadingGraphic.png" alt="" class="loadingImage" @click="skipTutorial">
+        <div class="loadingContainer">
+          <div class="loadingBar"></div>
+          <div class="loadingProgress"><span class="progressOutput">0</span>%</div>
+        </div>
+        <h1 class="loadingLabel">Starting program</h1>
       </div>
-      <h1 class="loadingLabel">Starting program</h1>
-    </div>
-  </SwiperSlide>
-  <SwiperSlide v-for="(page,index) in tutorialPages" :key="page.id">
-    <tutorial-display ref="displayRefs" :image="page.image" :data="page" :index="index" :cta="page.cta" @advance="advanceTutorial">
-    </tutorial-display>
-  </SwiperSlide>
+    </SwiperSlide>
+    <SwiperSlide v-for="(page, index) in tutorialPages" :key="page.id">
+      <tutorial-display ref="displayRefs" :image="page.image" :data="page" :index="index" :cta="page.cta" @advance="advanceTutorial">
+      </tutorial-display>
+    </SwiperSlide>
   </Swiper>
 </template>
+
 <script setup>
-  import { ref, reactive, watch, nextTick } from 'vue';
-  const swiper = ref(null)
-  const { $gsap } = useNuxtApp()
+import { ref, onMounted, nextTick, watch } from 'vue';
 
-  function getSwiperRef (swiperInstance) {
-    swiper.value = swiperInstance
-  }
+// Reactive state
+const swiper = ref(null);
+const displayRefs = ref([]);
+const tutorialPages = ref([]);
 
-  const displayRefs = ref([])
+// Use Nuxt's composables and utilities
+const { $gsap } = useNuxtApp();
 
-  function advanceTutorial() {
+// Fetch tutorial data on mounted
+onMounted(async () => {
+  tutorialPages.value = await queryContent('tutorial').find();
+
+  nextTick(() => {
     if (swiper.value) {
-      swiper.value.slideNext()
+      swiper.value.on('slideChange', () => {
+        if (swiper.value.activeIndex > 0 && displayRefs.value[swiper.value.activeIndex - 1]) {
+          displayRefs.value[swiper.value.activeIndex - 1].buildTypeIn();
+        }
+        if (swiper.value.activeIndex === tutorialPages.value.length) {
+          emit('tutorialComplete');
+        }
+      });
+
+      $gsap.to('.loadingBar', {
+        width: '100%',
+        duration: 10,
+        ease: 'steps(20)',
+        onComplete: () => {
+          swiper.value.slideNext();
+        }
+      });
+      $gsap.to('.progressOutput', {
+        textContent: 100,
+        duration: 10,
+        ease: 'steps(27)',
+        snap: { textContent: 1 },
+      });
     }
+  });
+});
+
+// Swiper reference assignment
+function getSwiperRef(swiperInstance) {
+  swiper.value = swiperInstance;
+}
+
+// Advance tutorial slides
+function advanceTutorial() {
+  if (swiper.value) {
+    swiper.value.slideNext();
   }
-  const emit = defineEmits(['tutorialComplete'])
+}
 
-  const tutorialPages = await queryContent('tutorial').find()
-  onMounted(() => {
+// Define emitted events
+const emit = defineEmits(['tutorialComplete']);
 
-    swiper.value.on('slideChange', () => {
-      displayRefs.value[swiper.value.activeIndex-1].buildTypeIn()
-      if (swiper.value.activeIndex === (tutorialPages.length)) {
-        emit('tutorialComplete')
-      }
-    })
-
-    $gsap.to('.loadingBar', {
-      width: '100%',
-      duration: 10,
-      ease: 'steps(20)',
-      onComplete: () => {
-        swiper.value.slideNext()
-      }
-    })
-    $gsap.to('.progressOutput', {
-      textContent: 100,
-      duration: 10,
-      ease: 'steps(27)',
-      snap: { textContent: 1 },
-    })
-
-  })
+// Skip tutorial function
 const skipTutorial = () => {
-  swiper.value.slideTo(tutorialPages.length)
+  if (swiper.value) {
+    swiper.value.slideTo(tutorialPages.value.length);
+  }
 }
 </script>
 
