@@ -50,36 +50,6 @@ export default defineNuxtConfig({
     workbox: {
       navigateFallback: '/',
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-      runtimeCaching: [
-        {
-          urlPattern: '/api/_content/operations/*', // Adjust the URL pattern to match your content API
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'operations-cache',
-            expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        },
-        {
-          urlPattern: '/api/_content/tutorial/*', // Adjust the URL pattern to match your content API
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'tutorials-cache',
-            expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        }
-      ],
       skipWaiting: true,
       clientsClaim: true,
     },
@@ -95,7 +65,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     { src: '~/plugins/isInstalled.js'},
-    {src: '~/plugins/event-bus.js'},
+    { src: '~/plugins/event-bus.js'},
   ],
   content: {
     markdown: {
