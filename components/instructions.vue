@@ -19,7 +19,7 @@
         <h1 class="loadingLabel">Starting program</h1>
       </div>
     </SwiperSlide>
-    <SwiperSlide v-for="(page, index) in tutorialPages" :key="page.id">
+    <SwiperSlide v-for="(page, index) in tutorialStore.tutorialPages" :key="page.id">
       <tutorial-display ref="displayRefs" :image="page.image" :data="page" :index="index" :cta="page.cta" @advance="advanceTutorial">
       </tutorial-display>
     </SwiperSlide>
@@ -28,18 +28,21 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue';
+import { useTutorialStore } from '@/stores/tutorialStore';
+
 
 // Reactive state
 const swiper = ref(null);
 const displayRefs = ref([]);
-const tutorialPages = ref([]);
+const tutorialStore = useTutorialStore();
+const tutorialPages = tutorialStore.tutorialPages; 
 
 // Use Nuxt's composables and utilities
 const { $gsap } = useNuxtApp();
 
 // Fetch tutorial data on mounted
 onMounted(async () => {
-  tutorialPages.value = await queryContent('tutorial').find();
+  console.log('Tutorial pages:', tutorialPages.value);
 
   nextTick(() => {
     if (swiper.value) {
@@ -54,15 +57,15 @@ onMounted(async () => {
 
       $gsap.to('.loadingBar', {
         width: '100%',
-        duration: 10,
-        ease: 'steps(20)',
+        duration: 7,
+        ease: 'steps(27)',
         onComplete: () => {
           swiper.value.slideNext();
         }
       });
       $gsap.to('.progressOutput', {
         textContent: 100,
-        duration: 10,
+        duration: 7,
         ease: 'steps(27)',
         snap: { textContent: 1 },
       });

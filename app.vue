@@ -28,4 +28,15 @@ useHead({
     { name: 'theme-color', content: '#000000'}
   ]
 })
+
+import { useOperationsStore } from '@/stores/operationsStore';
+import { useTutorialStore } from '@/stores/tutorialStore';
+
+const operationsStore = useOperationsStore();
+const tutorialStore = useTutorialStore();
+
+onMounted(async () => {
+  await operationsStore.fetchOperations();
+  await tutorialStore.fetchTutorialPages();
+});
 </script>
