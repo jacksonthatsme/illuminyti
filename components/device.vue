@@ -69,7 +69,6 @@ import locationFound from '~/components/locationFound.vue';
 import missionsPrinting from '~/components/missionsPrinting.vue';
 import cheatCodeInput from '~/components/cheatCodeInput.vue';
 import cipher from '~/components/cipher.vue';
-import { useNuxtApp } from '#imports';
 
 // Use Nuxt's global event bus and other globals
 const { $event } = useNuxtApp();

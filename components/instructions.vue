@@ -42,7 +42,6 @@ const { $gsap } = useNuxtApp();
 
 // Fetch tutorial data on mounted
 onMounted(async () => {
-  console.log('Tutorial pages:', tutorialPages.value);
 
   nextTick(() => {
     if (swiper.value) {
@@ -50,7 +49,7 @@ onMounted(async () => {
         if (swiper.value.activeIndex > 0 && displayRefs.value[swiper.value.activeIndex - 1]) {
           displayRefs.value[swiper.value.activeIndex - 1].buildTypeIn();
         }
-        if (swiper.value.activeIndex === tutorialPages.value.length) {
+        if (swiper.value.activeIndex === tutorialStore.tutorialPages.length) {
           emit('tutorialComplete');
         }
       });
@@ -90,8 +89,9 @@ const emit = defineEmits(['tutorialComplete']);
 
 // Skip tutorial function
 const skipTutorial = () => {
+  console.log('Skipping tutorial...');
   if (swiper.value) {
-    swiper.value.slideTo(tutorialPages.value.length);
+    swiper.value.slideTo(tutorialStore.tutorialPages.length);
   }
 }
 </script>
