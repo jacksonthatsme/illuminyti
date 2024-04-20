@@ -1,13 +1,20 @@
 <template>
-  <section class="instructionsSection" id="instructions">
-    <instructions @tutorial-complete="handleTutorialComplete"></instructions>
-  </section>
-  <section class="deviceSection" id="device">
-    <device :is-peeking="isDevicePeeking" ref="deviceRef"></device>
-  </section>
-  <section class="missionsSection" id="missions">
-    <missions ref="missionRef"></missions>
-  </section>
+  <template v-if="device.isInstalled">
+    <main>
+      <section class="instructionsSection" id="instructions">
+        <instructions @tutorial-complete="handleTutorialComplete"></instructions>
+      </section>
+      <section class="deviceSection" id="device">
+        <device :is-peeking="isDevicePeeking" ref="deviceRef"></device>
+      </section>
+      <section class="missionsSection" id="missions">
+        <missions ref="missionRef"></missions>
+      </section>
+    </main>
+  </template>
+  <template v-else>
+    <install></install>
+  </template>
 </template>
 
 <script setup>
@@ -15,6 +22,7 @@
   $gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
   const deviceRef = ref(null)
   const missionRef = ref(null)
+  const device = useDevice()
 
   const isDevicePeeking = ref(false)
 
@@ -58,6 +66,15 @@
 </script>
 
 <style lang="scss" scoped>
+main {
+  max-width: 500px;
+  height: 100dvh;
+  margin-right: auto;
+  margin-left: auto;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-snap-points-y: repeat(100dvh);
+}
   section {
     height: 100%;
     width: 100%;
