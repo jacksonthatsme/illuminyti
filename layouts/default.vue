@@ -1,5 +1,5 @@
 <template>
-  <template v-show="device.isInstalled">
+  <template v-if="device.isInstalled">
     <main>
       <section class="instructionsSection" id="instructions">
         <instructions @tutorial-complete="handleTutorialComplete"></instructions>
@@ -12,7 +12,7 @@
       </section>
     </main>
   </template>
-  <template v-show="!device.isInstalled">
+  <template v-else>
     <install></install>
   </template>
 </template>
