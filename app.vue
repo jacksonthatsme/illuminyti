@@ -29,17 +29,17 @@ useHead({
   ]
 })
 
-import { useOperationsStore } from '@/stores/operationsStore';
-import { useTutorialStore } from '@/stores/tutorialStore';
+// import { useOperationsStore } from '@/stores/operationsStore';
+// import { useTutorialStore } from '@/stores/tutorialStore';
 
-const operationsStore = useOperationsStore();
-const tutorialStore = useTutorialStore();
+// const operationsStore = useOperationsStore();
+// const tutorialStore = useTutorialStore();
 
-onMounted(async () => {
-  console.log("Fetching data...");
-  await operationsStore.fetchOperations();
-  console.log("Data fetched:", operationsStore.operations);
-  await tutorialStore.fetchTutorialPages();
-  console.log("Data fetched:", tutorialStore.tutorialPages);
-});
+// onMounted(async () => {
+//   console.log("Fetching data...");
+//   await operationsStore.fetchOperations();
+//   console.log("Data fetched:", operationsStore.operations);
+//   await tutorialStore.fetchTutorialPages();
+//   console.log("Data fetched:", tutorialStore.tutorialPages);
+// });
 </script>

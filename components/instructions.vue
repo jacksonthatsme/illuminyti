@@ -19,7 +19,7 @@
         <h1 class="loadingLabel">Starting program</h1>
       </div>
     </SwiperSlide>
-    <SwiperSlide v-for="(page, index) in tutorialStore.tutorialPages" :key="page.id">
+    <SwiperSlide v-for="(page, index) in tutorialPages" :key="page.id">
       <tutorial-display ref="displayRefs" :image="page.image" :data="page" :index="index" :cta="page.cta" @advance="advanceTutorial">
       </tutorial-display>
     </SwiperSlide>
@@ -28,18 +28,19 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue';
-import { useTutorialStore } from '@/stores/tutorialStore';
+// import { useTutorialStore } from '@/stores/tutorialStore';
 
 
 // Reactive state
 const swiper = ref(null);
 const displayRefs = ref([]);
-const tutorialStore = useTutorialStore();
-const tutorialPages = tutorialStore.tutorialPages; 
+// const tutorialStore = useTutorialStore();
+// const tutorialPages = tutorialStore.tutorialPages; 
+
 
 // Use Nuxt's composables and utilities
 const { $gsap } = useNuxtApp();
-
+const tutorialPages = await queryContent('tutorial').find()
 // Fetch tutorial data on mounted
 onMounted(async () => {
 
@@ -49,7 +50,7 @@ onMounted(async () => {
         if (swiper.value.activeIndex > 0 && displayRefs.value[swiper.value.activeIndex - 1]) {
           displayRefs.value[swiper.value.activeIndex - 1].buildTypeIn();
         }
-        if (swiper.value.activeIndex === tutorialStore.tutorialPages.length) {
+        if (swiper.value.activeIndex === tutorialPages.length) {
           emit('tutorialComplete');
         }
       });
@@ -91,7 +92,7 @@ const emit = defineEmits(['tutorialComplete']);
 const skipTutorial = () => {
   console.log('Skipping tutorial...');
   if (swiper.value) {
-    swiper.value.slideTo(tutorialStore.tutorialPages.length);
+    swiper.value.slideTo(tutorialPages.length);
   }
 }
 </script>
