@@ -6,13 +6,14 @@
       class="operationsContainer"
       :slides-per-view="1"
       :modules="[SwiperPagination]"
+      :loop="true"
       :pagination="{
         clickable: true,
         el: '.swiperPagination',
         type: 'bullets',
         bulletActiveClass: 'swiperBulletActive',
         bulletClass: 'swiperBullet',
-        bulletElement: 'div'
+        bulletElement: 'div',
       }"
       >
       <SwiperSlide class="operationDisplay" v-for="operation in props.operations" :key="operation.id">

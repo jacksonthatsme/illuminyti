@@ -52,7 +52,7 @@
 
   let operations = null; // Initialize operations outside
   function scrollToDevice() {
-    $gsap.to('main', 2, { scrollTo: { y: '#device' }, ease: 'power4.out' });
+    $gsap.to('main', 1, { scrollTo: { y: '#device' }, ease: 'power4.out' });
   }
 
   // Function to perform slide animation

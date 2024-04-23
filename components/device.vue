@@ -78,7 +78,7 @@ const activeOperationStore = useActiveOperationStore();
 const unlockedStore = useUnlockedStore();
 const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing();
 
-const isNum = ref(false);
+const isNum = ref(true);
 const code = ref('');
 const cheatCode = ref('');
 const currentScreenComponent = shallowRef(operationsIndex);
@@ -90,12 +90,11 @@ const props = defineProps({
 const isPeeking = computed(() => props.isPeeking);
 
 const operationsQuery = queryContent('operations')
-  const operations = await operationsQuery.find()
-  //operations filtered by hidden property
-// Derived state for operations
+const operations = await operationsQuery.find()
 const filteredOperations = computed(() => operations.filter(operation => !operation.hidden));
-const activeOperation = computed(() => filteredOperations.value.find(op => op.id === activeOperationStore.activeOperationId));
-
+const activeOperation = computed(() => {
+    return operations.find(op => op.id === activeOperationStore.activeOperationId)
+  })
 const screenData = computed(() => ({
   operations: filteredOperations.value,
   activeOperation: activeOperation.value,
@@ -104,16 +103,27 @@ const screenData = computed(() => ({
 }));
 
 const lightBulbState = computed(() => {
-  if (isRelayingLocation.value) {
-    return 'blinking';
-  }
-  if (errorMessage.value) {
+  if (currentScreenComponent.value === operationsIndex) {
     return 'off';
   }
-  if (isWithinGeofence.value) {
+  if (currentScreenComponent.value === relayLocation) {
+    return 'blinking';
+  }
+  if (currentScreenComponent.value === locationFound) {
     return 'on';
   }
-  return 'off';
+  if (currentScreenComponent.value === locationNotFound) {
+    return 'on';
+  }
+  if (currentScreenComponent.value === missionsPrinting) {
+    return 'blinking';
+  }
+  if (currentScreenComponent.value === cheatCodeInput) {
+    return 'blinking';
+  }
+  if (currentScreenComponent.value === cipher) {
+    return 'on';
+  }
 });
 
 function dialClick() {
@@ -139,6 +149,7 @@ function batteryClick() {
     clearTimeout(batteryTimeout);
     batteryTimeout = null;
     currentScreenComponent.value = operationsIndex;
+    activeOperationStore.setActiveOperationId(null);
   } else {
     batteryTimeout = setTimeout(() => {
       batteryTimeout = null;
@@ -150,6 +161,7 @@ async function handleRelayLocation() {
   currentScreenComponent.value = relayLocation;
   await checkLocation().then(async () => {
     if (isWithinGeofence.value) {
+      console.log('Location found:', isWithinGeofence.value);
       activeOperationStore.setActiveOperationId(isWithinGeofence.value.id);
       currentScreenComponent.value = locationFound;
       screenTimeoutRef.value = setTimeout(async () => {
@@ -168,9 +180,16 @@ function handleKeyPress(character, isOverride = false) {
   if (currentScreenComponent.value === cheatCodeInput && !isNum.value) {
     $event.$emit('shakeInput');
     return;
-  }
-  cheatCode.value += character;
-  if (activeOperation.value && currentScreenComponent.value === cipher) {
+  } else if (currentScreenComponent.value === cheatCodeInput) {
+    //if cheatCode.value.length is greater than 6 return
+    if (cheatCode.value.length >= 6 && !isOverride) {
+      return;
+    } else if (isOverride) {
+      cheatCode.value = cheatCode.value.slice(0, -1) + character;
+    } else {
+      cheatCode.value += character;
+    }
+  } else if (activeOperation.value && currentScreenComponent.value === cipher) {
     const maxCodeLength = activeOperation.value.code.length;
     if (code.value.length >= maxCodeLength && !isOverride) {
       return;
@@ -190,7 +209,7 @@ const handleBackspace = () => {
 
 const handleEnter = () => {
   if (currentScreenComponent.value === cheatCodeInput) {
-    const matchingOperationId = filteredOperations.value.find(operation => operation['cheat-code'] === cheatCode.value)?.id;
+    const matchingOperationId = operations.find(op => op['cheat-code'] == cheatCode.value)?.id;
     if (matchingOperationId) {
       activeOperationStore.setActiveOperationId(matchingOperationId);
       currentScreenComponent.value = locationFound;

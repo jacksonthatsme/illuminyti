@@ -6,7 +6,6 @@
       v-for="(el, ind) in slots"
       :key="el+ind"
       v-model="slots[ind]"
-      :autofocus="ind === 0"
       maxlength="1"
     >
   </div>
