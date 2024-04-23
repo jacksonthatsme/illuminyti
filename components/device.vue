@@ -202,8 +202,15 @@ function handleKeyPress(character, isOverride = false) {
 }
 
 const handleBackspace = () => {
-  if (code.value.length > 0) {
-    code.value = code.value.slice(0, -1);
+  if (currentScreenComponent.value === cheatCodeInput) {
+    if (cheatCode.value.length > 0) {
+      cheatCode.value = cheatCode.value.slice(0, -1);
+    }
+  }
+  if (currentScreenComponent.value === cipher) {
+    if (code.value.length > 0) {
+      code.value = code.value.slice(0, -1);
+    }
   }
 };
 
@@ -215,6 +222,7 @@ const handleEnter = () => {
       currentScreenComponent.value = locationFound;
       screenTimeoutRef.value = setTimeout(() => {
         currentScreenComponent.value = cipher;
+        cheatCode.value = '';
       }, 2000);
     } else {
       cheatCode.value = '';
