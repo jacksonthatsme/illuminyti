@@ -125,6 +125,10 @@ h2 {
   grid-row: 1/2;
   height: 80px;
   margin-bottom: 20px;
+  &[src*="gif"] {
+    width: 100%;
+    height: auto;
+  }
 }
 
 .tutorialAction {
@@ -163,9 +167,5 @@ h2 + h2 {
   }
 }
 
-.tutorialWrapper:has(.tutorialContent #this-is-not-a-test) {
-  h1 + h1 {
-    margin-top: 0px;
-  }
-}
+
 </style>

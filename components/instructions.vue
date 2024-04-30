@@ -92,7 +92,7 @@ const emit = defineEmits(['tutorialComplete']);
 const skipTutorial = () => {
   console.log('Skipping tutorial...');
   if (swiper.value) {
-    swiper.value.slideTo(tutorialPages.length);
+    swiper.value.slideTo(7);
   }
 }
 </script>
