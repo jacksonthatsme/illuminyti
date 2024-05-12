@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   components: true,
-  ssr: false,
+  ssr: true,
   modules: [
     '@fullpage/nuxt-fullpage',
     'nuxt-swiper',
@@ -50,38 +50,6 @@ export default defineNuxtConfig({
     workbox: {
       navigateFallback: '/',
       globPatterns: ['**/*.{js,css,html,png,svg,ico,md}'],
-      runtimeCaching: [
-        {
-          urlPattern: new RegExp('^/api/operations/.*'), // Regex for flexibility
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'operations-cache',
-            expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200], // Cache successful responses
-            },
-          },
-        },
-        {
-          urlPattern: new RegExp('^/api/tutorial/.*'), // Regex for flexibility
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'tutorials-cache',
-            expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200], // Cache successful responses
-            },
-          },
-        },
-      ],
-      skipWaiting: true, // Update immediately
-      clientsClaim: true, // Control clients immediately
     },
     client: {
       installPrompt: true,

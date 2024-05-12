@@ -89,16 +89,12 @@ const props = defineProps({
 });
 const isPeeking = computed(() => props.isPeeking);
 
-onMounted(async () => {
-  await operationsStore.fetchOperations(); // Fetch operations when component mounts
-  // You can also handle any post-fetch logic here if needed
-});
-
-// Now use operationsStore.operations in computed properties or directly in the template
-const filteredOperations = computed(() => operationsStore.operations.filter(operation => !operation.hidden));
+const operationsQuery = queryContent('operations')
+const operations = await operationsQuery.find()
+const filteredOperations = computed(() => operations.filter(operation => !operation.hidden));
 const activeOperation = computed(() => {
-  return operationsStore.operations.find(op => op.id === activeOperationStore.activeOperationId)
-});
+  return operations.find(op => op.id === activeOperationStore.activeOperationId)
+})
 const screenData = computed(() => ({
   operations: filteredOperations.value,
   activeOperation: activeOperation.value,

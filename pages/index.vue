@@ -27,10 +27,10 @@
   const instructionsStore = useInstructionsStore()
 
   // on mounted fetch operations
-  onMounted(async () => {
-    await operationsStore.fetchOperations()
-    await instructionsStore.fetchInstructions()
-  })
+  // onMounted(async () => {
+  //   await operationsStore.fetchOperations()
+  //   await instructionsStore.fetchInstructions()
+  // })
 
 
   const handleTutorialComplete = () => {
