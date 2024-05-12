@@ -1,8 +1,5 @@
 <template>  
-  <template v-if="!isFullscreen">
-    <install></install>
-  </template>
-  <main :class="{locked: !isFullscreen}">
+  <main>
     <slot />
   </main>
 </template>
