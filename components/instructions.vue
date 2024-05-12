@@ -28,20 +28,14 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue';
-// import { useTutorialStore } from '@/stores/tutorialStore';
-
 
 // Reactive state
 const swiper = ref(null);
 const displayRefs = ref([]);
-// const tutorialStore = useTutorialStore();
-// const tutorialPages = tutorialStore.tutorialPages; 
-
 
 // Use Nuxt's composables and utilities
 const { $gsap } = useNuxtApp();
-const tutorialPages = await queryContent('tutorial').find()
-// Fetch tutorial data on mounted
+const tutorialPages = await queryContent('instructions').find()
 onMounted(async () => {
 
   nextTick(() => {
@@ -92,7 +86,7 @@ const emit = defineEmits(['tutorialComplete']);
 const skipTutorial = () => {
   console.log('Skipping tutorial...');
   if (swiper.value) {
-    swiper.value.slideTo(7);
+    swiper.value.slideTo(tutorialPages.length);
   }
 }
 </script>

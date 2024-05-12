@@ -43,28 +43,30 @@
         },
         text: content.text,
         duration: content.text.length * 0.1, // Adjust duration as needed
-        ease: 'none',
+        ease: 'linear',
       },"+=1")
       typeIn.to(selector, {
         text: 'You have until 6pm. The team with the most points gets',
-        duration: 1, // Adjust duration as needed
-        ease: 'none',
-      },"+=.5")
+        duration: 2, // Adjust duration as needed
+        ease: 'linear',
+      },">")
       typeIn.to(selector, {
-        text: 'You have until 6pm. The team with the most points gets a prize',
-        duration: 1, // Adjust duration as needed
-        ease: 'none',
+        text: 'You have until 6pm. The team with the most points gets a prize.',
+        duration: 2, // Adjust duration as needed
+        ease: 'linear',
         onComplete: () => {
           document.querySelector(selector).classList.remove('typing-cursor');
         }
-      },"+=.5")
-    } if (content.tag == 'h2') {
+      },">")
+      return
+    } else if (content.tag == 'h3') {
       typeIn.to(selector, {
         onStart: () => {
           document.querySelector(selector).classList.add('typing-cursor');
         },
         text: content.text,
         duration: content.text.length * 0.05, // Adjust duration as needed
+        ease: 'linear',
         onComplete: () => {
           document.querySelector(selector).classList.remove('typing-cursor');
         }
@@ -111,12 +113,12 @@ defineExpose({ buildTypeIn, tutorialDisplay });
   padding: 12% 6%;
 }
 
-h1 {
+h1,h2 {
   font-size: 22px;
   line-height: 28px;
   letter-spacing: .1rem;
 }
-h2 {
+h3 {
   font-size: 18px;
   line-height: 26px;
   letter-spacing: .1rem;
@@ -150,14 +152,14 @@ h2.typing-cursor::after {
   height: 16px;
   width: 8px;
 }
-h1 + h1 {
+h2 + h2 {
   margin-top: 30px;
 }
-h1 + h2 {
+h2 + h3 {
   margin-top: 30px;
 }
 
-h2 + h2 {
+h3 + h3 {
   margin-top: 20px;
 }
 
