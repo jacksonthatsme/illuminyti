@@ -58,7 +58,6 @@
 
 <script setup>
 import { ref, shallowRef, computed } from 'vue';
-// import { useOperationsStore } from '~/stores/operationsStore';
 import { useActiveOperationStore } from '~/stores/activeOperation';
 import { useUnlockedStore } from '~/stores/unlocked';
 import { useGeofencing } from '~/composables/useGeofencing';
@@ -69,12 +68,13 @@ import locationFound from '~/components/locationFound.vue';
 import missionsPrinting from '~/components/missionsPrinting.vue';
 import cheatCodeInput from '~/components/cheatCodeInput.vue';
 import cipher from '~/components/cipher.vue';
+import { useOperationsStore } from '~/stores/operationsStore';
 
 // Use Nuxt's global event bus and other globals
 const { $event } = useNuxtApp();
 
-// const operationsStore = useOperationsStore();
 const activeOperationStore = useActiveOperationStore();
+const operationsStore = useOperationsStore();
 const unlockedStore = useUnlockedStore();
 const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing();
 
@@ -89,12 +89,16 @@ const props = defineProps({
 });
 const isPeeking = computed(() => props.isPeeking);
 
-const operationsQuery = queryContent('operations')
-const operations = await operationsQuery.find()
-const filteredOperations = computed(() => operations.filter(operation => !operation.hidden));
+onMounted(async () => {
+  await operationsStore.fetchOperations(); // Fetch operations when component mounts
+  // You can also handle any post-fetch logic here if needed
+});
+
+// Now use operationsStore.operations in computed properties or directly in the template
+const filteredOperations = computed(() => operationsStore.operations.filter(operation => !operation.hidden));
 const activeOperation = computed(() => {
-  return operations.find(op => op.id === activeOperationStore.activeOperationId)
-})
+  return operationsStore.operations.find(op => op.id === activeOperationStore.activeOperationId)
+});
 const screenData = computed(() => ({
   operations: filteredOperations.value,
   activeOperation: activeOperation.value,

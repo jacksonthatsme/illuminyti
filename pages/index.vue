@@ -11,18 +11,32 @@
 </template>
 
 <script setup>
+  import { useOperationsStore } from '~/stores/operationsStore';
+  import { useInstructionsStore } from '~/stores/instructionsStore'; 
   const { $gsap, $ScrollToPlugin, $ScrollTrigger, $event} = useNuxtApp()
   $gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
   const deviceRef = ref(null)
   const missionRef = ref(null)
+  //import operations store
+
 
   const isDevicePeeking = ref(false)
+  const operationsStore = useOperationsStore()
+  const instructionsStore = useInstructionsStore()
+
+  // on mounted fetch operations
+  onMounted(async () => {
+    await operationsStore.fetchOperations()
+    await instructionsStore.fetchInstructions()
+  })
 
 
   const handleTutorialComplete = () => {
     console.log('handleTutorialComplete')
     isDevicePeeking.value = true
   }
+
+  
 
   watch(isDevicePeeking, (newVal) => {
     if (newVal) {
@@ -35,7 +49,6 @@
         delay: 2,
         ease: 'power4.out',
         onComplete: () => {
-          console.log('Device is in final position');
           // Create and configure the GSAP timeline after the animation completes
           const tl = $gsap.timeline({
             scrollTrigger: {

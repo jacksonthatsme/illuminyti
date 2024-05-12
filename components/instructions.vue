@@ -19,7 +19,7 @@
         <h1 class="loadingLabel">Starting program</h1>
       </div>
     </SwiperSlide>
-    <SwiperSlide v-for="(page, index) in tutorialPages" :key="page.id">
+    <SwiperSlide v-for="(page, index) in instructionsStore.instructions" :key="page.id">
       <tutorial-display ref="displayRefs" :image="page.image" :data="page" :index="index" :cta="page.cta" @advance="advanceTutorial">
       </tutorial-display>
     </SwiperSlide>
@@ -28,15 +28,18 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue';
+import { useInstructionsStore } from '~/stores/instructionsStore'; // Import the store
 
-// Reactive state
+const instructionsStore = useInstructionsStore(); // Initialize the store
 const swiper = ref(null);
 const displayRefs = ref([]);
 
 // Use Nuxt's composables and utilities
 const { $gsap } = useNuxtApp();
-const tutorialPages = await queryContent('instructions').find()
+
+// Fetch instructions on component mount
 onMounted(async () => {
+  await instructionsStore.fetchInstructions(); // Fetch instructions
 
   nextTick(() => {
     if (swiper.value) {
@@ -44,7 +47,7 @@ onMounted(async () => {
         if (swiper.value.activeIndex > 0 && displayRefs.value[swiper.value.activeIndex - 1]) {
           displayRefs.value[swiper.value.activeIndex - 1].buildTypeIn();
         }
-        if (swiper.value.activeIndex === tutorialPages.length) {
+        if (swiper.value.activeIndex === instructionsStore.instructions.length) {
           emit('tutorialComplete');
         }
       });
@@ -67,26 +70,23 @@ onMounted(async () => {
   });
 });
 
-// Swiper reference assignment
+// Other methods and setup logic
 function getSwiperRef(swiperInstance) {
   swiper.value = swiperInstance;
 }
 
-// Advance tutorial slides
 function advanceTutorial() {
   if (swiper.value) {
     swiper.value.slideNext();
   }
 }
 
-// Define emitted events
 const emit = defineEmits(['tutorialComplete']);
 
-// Skip tutorial function
 const skipTutorial = () => {
   console.log('Skipping tutorial...');
   if (swiper.value) {
-    swiper.value.slideTo(tutorialPages.length);
+    swiper.value.slideTo(instructionsStore.instructions.length);
   }
 }
 </script>
