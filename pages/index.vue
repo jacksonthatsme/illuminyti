@@ -1,4 +1,5 @@
 <template>
+  <ClientOnly>
   <section class="instructionsSection" id="instructions">
     <instructions @tutorial-complete="handleTutorialComplete"></instructions>
   </section>
@@ -8,6 +9,7 @@
   <section class="missionsSection" id="missions">
     <missions ref="missionRef"></missions>
   </section>
+</ClientOnly>
 </template>
 
 <script setup>
