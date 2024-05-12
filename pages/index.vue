@@ -3,7 +3,7 @@
     <instructions @tutorial-complete="handleTutorialComplete"></instructions>
   </section>
   <section class="deviceSection" id="device">
-    <device :is-peeking="isDevicePeeking" ref="deviceRef"></device>
+    <device :is-peeking="isDevicePeeking.value" ref="deviceRef"></device>
   </section>
   <section class="missionsSection" id="missions">
     <missions ref="missionRef"></missions>
@@ -63,5 +63,9 @@
     width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
+  }
+  .deviceSection {
+    position: relative;
+    z-index: 10;
   }
 </style>

@@ -3,8 +3,8 @@
     <div class="deviceWrapper">
       <div class="top">
         <div class="light" @click="lightClick" :class="{'isOn': lightBulbState === 'on', 
-                                    'isOff': lightBulbState === 'off', 
-                                    'isBlinking': lightBulbState === 'blinking'}">
+                                                        'isOff': lightBulbState === 'off', 
+                                                        'isBlinking': lightBulbState === 'blinking'}">
           <div class="bulb"></div>
           <div class="base"></div>
           <div class="glow"></div>
@@ -24,7 +24,7 @@
             <component :is="currentScreenComponent" v-bind="screenData"></component>
           </div>
           <div class="screenLabel">
-            Transciever
+            Serial No. 1375
           </div>
         </div>
         <div class="punchOuts">
@@ -93,8 +93,8 @@ const operationsQuery = queryContent('operations')
 const operations = await operationsQuery.find()
 const filteredOperations = computed(() => operations.filter(operation => !operation.hidden));
 const activeOperation = computed(() => {
-    return operations.find(op => op.id === activeOperationStore.activeOperationId)
-  })
+  return operations.find(op => op.id === activeOperationStore.activeOperationId)
+})
 const screenData = computed(() => ({
   operations: filteredOperations.value,
   activeOperation: activeOperation.value,
@@ -123,6 +123,9 @@ const lightBulbState = computed(() => {
   }
   if (currentScreenComponent.value === cipher) {
     return 'on';
+  }
+  if (isPeeking) {
+    return 'blinking';
   }
 });
 
@@ -248,14 +251,13 @@ const handleEnter = () => {
     width: 100%;
     height: 100%;
     background-color: #000000;
-    overflow-x: hidden;
-    overflow-y: visible;
+    // overflow-x: hidden;
+    // overflow-y: visible;
   }
   .deviceWrapper {
     width: 100%;
     height: 100%;
     display: grid;
-    overflow: hidden;
     grid-template-rows: minmax(20px,40px) 1fr;
   }
   .top {
@@ -282,6 +284,7 @@ const handleEnter = () => {
     grid-template-rows: minmax(0, 1fr) auto min-content;
     min-width: 0px;
     min-height: 0px;
+    overflow: hidden;
   }
   .edge {
     grid-row: 2/3;

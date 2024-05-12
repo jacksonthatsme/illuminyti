@@ -68,7 +68,7 @@
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: -1;
+    z-index: 10;
     color: #242424;
     min-width: 0;
     min-height: 0;
@@ -139,10 +139,12 @@
   .instructionsContainer {
     margin-top: 100dvh;
     background-color: white;
+    position: absolute;
+    z-index: 11;
     padding: 10vw 5vw;
     background: url('/assets/images/PaperTexture.png'), #F7F7E7;
     background-repeat: repeat, no-repeat;
-    background-size: 400px, cover;
+    background-size: 100px, cover;
     background-blend-mode: hard-light, normal;
   }
   .instructionImage {

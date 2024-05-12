@@ -12,11 +12,11 @@ polygon:
   - { latitude: 40.7338414, longitude: -73.9964592 }
 missions:
   - points: 1
-    content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
+    content: 'A photo with a team member peaking inside the IFC peephole.'
   - points: 3
-    content: 'Make like a Boston City Cop and tumble down a slide. Get the scene on video for 3 points.'
+    content: 'Do the Harlem shake in front of a shake shack'
   - points: 5
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-This is the clue that points you towards Mark Twains Plaque
+Where a literary giant made his mark. Find the plaque, near the park.
