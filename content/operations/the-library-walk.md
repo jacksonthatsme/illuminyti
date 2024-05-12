@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-This is the clue that points you towards The Library Walk
+Stroll where the sidewalk speaks, guiding you to the lion's den.

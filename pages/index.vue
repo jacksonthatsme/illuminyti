@@ -1,44 +1,30 @@
 <template>
   <ClientOnly>
-  <section class="instructionsSection" id="instructions">
-    <instructions @tutorial-complete="handleTutorialComplete"></instructions>
-  </section>
-  <section class="deviceSection" id="device">
-    <device :is-peeking="isDevicePeeking.value" ref="deviceRef"></device>
-  </section>
-  <section class="missionsSection" id="missions">
-    <missions ref="missionRef"></missions>
-  </section>
-</ClientOnly>
+    <section class="instructionsSection" id="instructions">
+      <instructions @tutorial-complete="handleTutorialComplete"></instructions>
+    </section>
+    <section class="deviceSection" id="device">
+      <device :is-peeking="isDevicePeeking.value" ref="deviceRef"></device>
+    </section>
+    <section class="missionsSection" id="missions">
+      <missions ref="missionRef"></missions>
+    </section>
+  </ClientOnly>
 </template>
 
 <script setup>
-  import { useOperationsStore } from '~/stores/operationsStore';
-  import { useInstructionsStore } from '~/stores/instructionsStore'; 
   const { $gsap, $ScrollToPlugin, $ScrollTrigger, $event} = useNuxtApp()
   $gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
   const deviceRef = ref(null)
   const missionRef = ref(null)
-  //import operations store
-
 
   const isDevicePeeking = ref(false)
-  const operationsStore = useOperationsStore()
-  const instructionsStore = useInstructionsStore()
-
-  // on mounted fetch operations
-  // onMounted(async () => {
-  //   await operationsStore.fetchOperations()
-  //   await instructionsStore.fetchInstructions()
-  // })
-
 
   const handleTutorialComplete = () => {
     console.log('handleTutorialComplete')
     isDevicePeeking.value = true
   }
 
-  
 
   watch(isDevicePeeking, (newVal) => {
     if (newVal) {
