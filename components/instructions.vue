@@ -34,7 +34,7 @@ const swiper = ref(null);
 const displayRefs = ref([]);
 
 // Use Nuxt's composables and utilities
-const { $gsap } = useNuxtApp();
+const { $gsap, $event } = useNuxtApp();
 const tutorialPages = await queryContent('instructions').find()
 onMounted(async () => {
 
@@ -45,7 +45,7 @@ onMounted(async () => {
           displayRefs.value[swiper.value.activeIndex - 1].buildTypeIn();
         }
         if (swiper.value.activeIndex === tutorialPages.length) {
-          emit('tutorialComplete');
+          $event.$emit('tutorialComplete');
         }
       });
 
@@ -78,9 +78,6 @@ function advanceTutorial() {
     swiper.value.slideNext();
   }
 }
-
-// Define emitted events
-const emit = defineEmits(['tutorialComplete']);
 
 // Skip tutorial function
 const skipTutorial = () => {

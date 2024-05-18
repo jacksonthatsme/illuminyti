@@ -25,6 +25,11 @@
     isDevicePeeking.value = true
   }
 
+  $event.$on('tutorialComplete', (e) => {
+    console.log('tutorialComplete')
+    isDevicePeeking.value = true
+  })
+
 
   watch(isDevicePeeking, (newVal) => {
     if (newVal) {

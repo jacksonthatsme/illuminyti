@@ -1,10 +1,11 @@
 <template>  
-  <main>
+  <main :class="{'scroll-lock': isScrollLocked}">
     <slot />
   </main>
 </template>
 <script setup>
 const device = useDevice()
+const { $event } = useNuxtApp()
 const isFullscreen = computed(() => {
   if(process.env.NODE_ENV === "development") {
     return false
@@ -13,6 +14,11 @@ const isFullscreen = computed(() => {
   } else {
     return false
   }
+})
+const isScrollLocked = ref(true)
+
+$event.$on('tutorialComplete', (e) => {
+  isScrollLocked.value = false
 })
 
 </script>
@@ -27,9 +33,9 @@ main {
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
 
-  &.locked {
-    pointer-events: none;
+  &.scroll-lock {
     overflow: hidden;
+    scroll-snap-type: none;
   }
 }
 </style>

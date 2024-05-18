@@ -251,8 +251,6 @@ const handleEnter = () => {
     width: 100%;
     height: 100%;
     background-color: #000000;
-    // overflow-x: hidden;
-    // overflow-y: visible;
   }
   .deviceWrapper {
     width: 100%;
