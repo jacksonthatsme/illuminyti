@@ -2,9 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   components: true,
-  ssr: true,
   modules: [
-    '@fullpage/nuxt-fullpage',
     'nuxt-swiper',
     '@hypernym/nuxt-gsap',
     '@nuxtjs/device',
@@ -74,7 +72,7 @@ export default defineNuxtConfig({
     extraPlugins: {
       text: true,
       scrollTrigger: true,
-      scrollTo: true,
+      scrollTo: true
     }
-  },
+  }
 })

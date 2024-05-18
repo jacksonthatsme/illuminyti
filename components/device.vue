@@ -124,7 +124,7 @@ const lightBulbState = computed(() => {
   if (currentScreenComponent.value === cipher) {
     return 'on';
   }
-  if (isPeeking) {
+  if (isPeeking.value) {
     return 'blinking';
   }
 });

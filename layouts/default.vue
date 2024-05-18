@@ -1,5 +1,6 @@
-<template>  
-  <main :class="{'scroll-lock': isScrollLocked}">
+<template>
+  <install v-if="!isFullscreen"></install>  
+  <main v-if="isFullscreen" :class="{'scroll-lock': isScrollLocked}">
     <slot />
   </main>
 </template>

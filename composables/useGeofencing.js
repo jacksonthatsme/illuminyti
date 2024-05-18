@@ -37,7 +37,7 @@ export const useGeofencing = () => {
       });
 
       // Wait for 5 seconds before continuing
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 5000));
 
       isWithinGeofence.value = found;
     } catch (error) {
