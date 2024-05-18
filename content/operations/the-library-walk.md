@@ -1,7 +1,7 @@
 ---
 name: The Library Walk
 code: books
-cheat-code: 44444
+cheat-code: 333333
 hidden: false
 id: t-l-w
 polygon:

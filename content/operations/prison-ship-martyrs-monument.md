@@ -2,7 +2,7 @@
 name: Prison Ship Martyrs Monument
 code: prison
 id: p-s-s
-cheat-code: 13131
+cheat-code: 777777
 hidden: false
 polygon:
   - { latitude: 40.69176399696428, longitude: -73.97613541640887 }

@@ -2,7 +2,7 @@
 name: Mark Twain Plaque
 code: animals
 id: m-t-p
-cheat-code: 55555
+cheat-code: 555555
 hidden: false
 polygon:
   - { latitude: 40.7338414, longitude: -73.9964592 }

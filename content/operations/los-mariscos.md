@@ -1,8 +1,8 @@
 ---
-name: The Lot Radio
-code: Danger
-id: t-l-r
-cheat-code: 131313
+name: Los Mariscos
+code: pacific
+id: l-m-s
+cheat-code: 101010
 hidden: false
 polygon:
   - { latitude: 40.7338414, longitude: -73.9964592 }
@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-The Lot Radio
+Los Mariscos

@@ -232,16 +232,20 @@ const handleEnter = () => {
       $event.$emit('shakeInput');
     }
   }
-  if (activeOperation.value && code.value === activeOperation.value.code) {
-    unlockedStore.unlockOperation(activeOperation.value.id);
-    currentScreenComponent.value = missionsPrinting;
-    screenTimeoutRef.value = setTimeout(() => {
-      currentScreenComponent.value = operationsIndex;
-      activeOperationStore.setActiveOperationId(null);
-    }, 2000);
-  } else {
-    code.value = '';
-    $event.$emit('shakeInput');
+  if (activeOperation.value) {
+    var currentCode = code.value.toLowerCase();
+    var accessCode = activeOperation.value.code.toLowerCase();
+    if (currentCode === accessCode) {
+      unlockedStore.unlockOperation(activeOperation.value.id);
+      currentScreenComponent.value = missionsPrinting;
+      screenTimeoutRef.value = setTimeout(() => {
+        currentScreenComponent.value = operationsIndex;
+        activeOperationStore.setActiveOperationId(null);
+      }, 2000);
+    } else {
+      code.value = '';
+      $event.$emit('shakeInput');
+    }
   }
 };
 </script>

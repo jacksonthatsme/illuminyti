@@ -1,7 +1,7 @@
 <template>
   <div class="cheatCodeWrapper">
     <div class="tag">Enter Cheat Code</div>
-    <split-input :input-count="5" :code="cheatCode"></split-input>
+    <split-input :input-count="6" :code="cheatCode"></split-input>
   </div>
 </template>
 <script setup>

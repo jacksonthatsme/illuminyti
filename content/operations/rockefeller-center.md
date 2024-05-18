@@ -1,7 +1,7 @@
 ---
 name: Rockefeller Center
-code: wisdom
-cheat-code: 66666
+code: moonsteam
+cheat-code: 888888
 id: r-f-c
 hidden: false
 polygon:
