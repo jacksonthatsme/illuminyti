@@ -1,6 +1,6 @@
 <template>
-  <div class="m-t-pScreen">
-    <split-input :input-count="inputCount" :code="code" class="input"></split-input>
+  <div class="i-t-cScreen">
+    <split-input :input-count="inputCount" :code="code"></split-input>
   </div>
 </template>
 <script setup>
@@ -11,7 +11,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .m-t-pScreen {
+  .i-t-cScreen {
     height: 100%;
     width: 100%;
     display: flex;

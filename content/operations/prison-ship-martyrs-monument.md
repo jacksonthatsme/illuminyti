@@ -1,8 +1,8 @@
 ---
-name: Mark Twain Plaque
-code: animals
-id: m-t-p
-cheat-code: 11111
+name: Prison Ship Martyrs Monument
+code: prison
+id: p-s-s
+cheat-code: 13131
 hidden: false
 polygon:
   - { latitude: 40.69176399696428, longitude: -73.97613541640887 }

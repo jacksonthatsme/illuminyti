@@ -1,5 +1,5 @@
 <template>
-  <div class="m-t-pScreen">
+  <div class="p-s-sScreen">
     <split-input :input-count="inputCount" :code="code" class="input"></split-input>
   </div>
 </template>
@@ -11,7 +11,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .m-t-pScreen {
+  .p-s-sScreen {
     height: 100%;
     width: 100%;
     display: flex;
