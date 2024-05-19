@@ -18,7 +18,7 @@
     }
   })
   onMounted(() => {
-    console.log('activeOperation: ', props.activeOperation)
+    // console.log('activeOperation: ', props.activeOperation)
   })
 </script>
 <style lang="scss" scoped>

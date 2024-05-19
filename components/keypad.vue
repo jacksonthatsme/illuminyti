@@ -74,13 +74,13 @@
         if (lastKeyPressed.value === key) {
           // Replace the last character (mutable character) if the same key is pressed
           // code.value = code.value.slice(0, -1) + character;
-          console.log('emit with override flag')
+          // console.log('emit with override flag')
           emit('keyPress', character, true); // Emit with override flag
         } else {
           // Add a new character if a different key is pressed or if it's the first character
           
           // code.value += character;
-          console.log('emit without override flag')
+          // console.log('emit without override flag')
           emit('keyPress', character)
         }
       }

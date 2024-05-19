@@ -1,6 +1,6 @@
 <template>
   <div class="missionsSection">
-    <div class="edge">
+    <div class="edge" @click="addDummySlide">
       <div class="printSlotOuter">
         <div class="printSlotInner"></div>
       </div>
@@ -12,8 +12,13 @@
         :slides-per-view="1"
         :modules="[SwiperEffectCards]"
         :effect="'cards'"
+      >
+        <SwiperSlide 
+          v-for="(operation, index) in slides" 
+          :key="operation.id" 
+          :ref="setSlideRef(index)" 
+          class="missionSlide"
         >
-        <SwiperSlide v-for="(operation, index) in slides.value" :key="operation.id" :ref="setSlideRef(index)" class="missionSlide">
           <missions-card :missions="operation.missions"></missions-card>
         </SwiperSlide>
       </Swiper>
@@ -33,50 +38,53 @@
 </template>
 
 <script setup>
-  import { ref, reactive, watch, nextTick } from 'vue';
-  const { $gsap } = useNuxtApp();
-  import { useUnlockedStore } from '~/stores/unlocked'; // Import the Pinia store
+import { ref, watch, nextTick } from 'vue';
+import { useUnlockedStore } from '~/stores/unlocked'; // Import the Pinia store
+import { useNuxtApp } from '#app';
 
-  const swiper = ref(null);
+const { $gsap } = useNuxtApp();
 
-  function getSwiperRef(swiperInstance) {
-    swiper.value = swiperInstance;
+const swiper = ref(null);
+const slides = ref([]);
+const slideRefs = ref([]); // Array to store refs
+
+const unlockedStore = useUnlockedStore(); // Access the Pinia store
+
+const contentQuery = queryContent('operations'); // Assuming a function to fetch operations
+
+let operations = null; // Initialize operations outside
+
+function getSwiperRef(swiperInstance) {
+  swiper.value = swiperInstance;
+}
+
+function scrollToDevice() {
+  $gsap.to('main', { duration: 1, scrollTo: { y: '#device' }, ease: 'power4.out' });
+}
+
+// Function to perform slide animation
+function animateSlide(slideRef) {
+  if (slideRef) {
+    console.log('Animating slide:', slideRef);
+    $gsap.from(slideRef, {
+      duration: 2,
+      ease: "power2.inOut",
+      y: '-800px',
+    });
+    $gsap.to('main', { duration: 2, scrollTo: { y: '#missions' }, ease: "power2.inOut" }, "<");
+  } else {
+    console.error('Slide ref is null');
   }
+}
 
-  const slides = reactive([]);
-  const slideRefs = ref(slides.map(() => ref(null)));
+// Fetch operations on load and update slides
+contentQuery.find().then(fetchedOperations => {
+  operations = fetchedOperations;
+  setSlides(); // Call the update function to handle initial population
+});
 
-  const unlockedStore = useUnlockedStore(); // Access the Pinia store
-
-  const contentQuery = queryContent('operations'); // Assuming a function to fetch operations
-
-  let operations = null; // Initialize operations outside
-  function scrollToDevice() {
-    $gsap.to('main', 1, { scrollTo: { y: '#device' }, ease: 'power4.out' });
-  }
-
-  // Function to perform slide animation
-  function animateSlide(slideRef) {
-    // console.log(slideRef)
-    if (slideRef) {
-      nextTick(() => {
-        $gsap.from(slideRef, {
-          duration: 2,
-          ease: "power2.inOut",
-          y: '-800px',
-        })
-        $gsap.to('main', 2, {scrollTo: {y:'#missions'}, ease: "power2.inOut"},"<")
-      });
-    }
-  }
-
-  // Fetch operations on load and update slides
-  contentQuery.find().then(fetchedOperations => {
-    operations = fetchedOperations;
-    setSlides(); // Call the update function to handle initial population
-  });
-
-  watch(unlockedStore, () => {
+//watch unlocked store, if theres a new unlocked operation, add it to the slides
+watch(unlockedStore, () => {
     const newUnlockedOperations = unlockedStore.unlockedOperations.filter(
       (id) => !slides.value.some((slide) => slide.id === id)
     ); // Filter new unlocked operations
@@ -89,72 +97,66 @@
     });
   });
 
-  function setSlides() {
-    if (!operations) return;
+function setSlides() {
+  if (!operations) return;
 
-    const unlockedIds = unlockedStore.unlockedOperations;
-    const filteredSlides = operations.filter(operation => unlockedIds.includes(operation.id));
+  const unlockedIds = unlockedStore.unlockedOperations;
+  const filteredSlides = operations.filter(operation => unlockedIds.includes(operation.id));
 
-    slides.value = filteredSlides; 
-  }
+  slides.value = filteredSlides;
+  updateSlideRefs();
+}
 
-  // Function to update slides based on unlocked operations
-  function updateSlides() {
-    if (!operations) return;
+function updateSlideRefs() {
+  slideRefs.value = slides.value.map(() => ref(null));
+}
 
-    const unlockedIds = unlockedStore.unlockedOperations;
-    const filteredSlides = operations.filter(operation => unlockedIds.includes(operation.id));
-
-    slides.value = filteredSlides; // Update slides with filtered data
-
-    // Animate newly added slides
-    const newSlideRef = slideRefs.value[0]; // Get the ref of the first slide
-    nextTick(() => { // Ensure DOM is updated before animating
-      animateSlide(newSlideRef); // Pass the element to the animateSlide function
-    });
-  }
-
-  const setSlideRef = index => el => {
+const setSlideRef = index => el => {
+  if (el) {
     slideRefs.value[index] = el;
-  };
-  // Function to add a new slide and animate it
-  function addSlide(newSlideData) {
-    slides.value.push(newSlideData);
-    slideRefs.value.push(ref(null));
-
-    nextTick(() => {
-      const newSlideRef = slideRefs.value[slides.value.length - 1];
-      console.log(newSlideRef)
-      animateSlide(newSlideRef.$el); // Animate the newly added slide
-    });
   }
+};
 
-  // Function to add a dummy slide with animation
-  const addDummySlide = () => {
-    slides.value.unshift({
-      id: 'stubbed-id',
-      missions: [
-        {
-          points: 1,
-          content: 'This is a stubbed mission description',
-        },
-        {
-          points: 3,
-          content: 'This is a stubbed mission description',
-        },
-        {
-          points: 5,
-          content: 'This is a stubbed mission description',
-        },
-      ],
-    });
-    slideRefs.value.unshift(ref(null)); // Add a new ref for the dummy slide
-    nextTick(() => {
-      animateSlide(slideRefs.value[0].$el); // Animate the newly added dummy slide
-    });
+// Function to add a new slide and animate it
+function addSlide(newSlideData) {
+  slides.value.unshift(newSlideData); // Add to the front
+  slideRefs.value.unshift(ref(null));
+
+  nextTick(() => {
+    if (swiper.value) swiper.value.update(); // Update Swiper
+    const newSlideRef = slideRefs.value[0];
+    console.log('newSlideRef:', newSlideRef); // Debug log to check the ref
+
+    const target = newSlideRef?.$el || newSlideRef; // Ensure the ref is a DOM element
+    console.log('target for animation:', target); // Debug log to check the target
+
+    animateSlide(target); // Animate the newly added slide
+  });
+}
+
+// Function to add a dummy slide with animation
+const addDummySlide = () => {
+  const dummySlide = {
+    id: 'stubbed-id',
+    missions: [
+      {
+        points: 1,
+        content: 'This is a stubbed mission description',
+      },
+      {
+        points: 3,
+        content: 'This is a stubbed mission description',
+      },
+      {
+        points: 5,
+        content: 'This is a stubbed mission description',
+      },
+    ],
   };
+  addSlide(dummySlide);
+};
 
-  defineExpose({ setSlideRef, addDummySlide });
+defineExpose({ setSlideRef, addDummySlide });
 
 </script>
 

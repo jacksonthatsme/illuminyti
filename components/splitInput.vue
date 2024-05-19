@@ -27,7 +27,7 @@
   const inputShake = $gsap.timeline({paused: true});
   
   const shakeInput = () => {
-    console.log('shakeInput')
+    // console.log('shakeInput')
     // inputShake.play();
     $gsap.to('.splitInput', .1, {
       x: -7,
@@ -73,7 +73,7 @@
   }
 
   watch(()=>props.code, (newVal, oldVal) => {
-     console.log(newVal.slice(0, props.inputCount));
+    //  console.log(newVal.slice(0, props.inputCount));
      for (let i =0; i < props.inputCount; i++) {
         slots[i] = newVal.charAt(i);
     }

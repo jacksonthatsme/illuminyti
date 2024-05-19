@@ -19,9 +19,10 @@
       <SwiperSlide class="operationDisplay" v-for="operation in props.operations" :key="operation.id">
         <div class="operationStatus">
           <div v-if="lockStatus(operation.id)">
-            <svg width="24" height="30" viewBox="0 0 24 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0H9H12H15H18V3H15H12H9H6V0ZM6 3V6V9H3V6V3H6ZM18 3H21V6V9V12V15H24V18V21V24V27V30V33V36H21H18H15H12H9H6H3H0V33V30V27V24V21V18V15H3H6H9H12H15H18V12V9V6V3ZM15 21H12H9V24V27V30H12H15V27V24V21Z" fill="#5E5940"/>
-              </svg>
+            <svg width="39" height="66" viewBox="0 0 39 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M24 0V3H30V6H33V9H36V15H39V27H36V33H33V39H30V42H27V45H24V48H21V51H18V48H15V45H12V42H9V39H6V33H3V27H0V15H3V9H6V6H9V3H15V0H24ZM27 24H24V27H21V30H18V33H15V30H12V27H9V21H12V24H15V27H18V24H21V21H24V18H27V15H30V21H27V24Z" fill="#5E5940"/>
+              <path d="M24 63V66H15V63H12V60H15V57H24V60H27V63H24Z" fill="#5E5940"/>
+            </svg>
           </div>
           <div v-else>
             <svg width="39" height="66" viewBox="0 0 39 66" fill="none" xmlns="http://www.w3.org/2000/svg">
