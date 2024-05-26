@@ -30,7 +30,6 @@
             </svg>
           </div>
         </div>
-        <!-- <div class="operationLabel">RENDEZVOUS Point</div> -->
         <div class="operationClue" :ref="setClueRefs">
           <p>
             {{operation.description}}

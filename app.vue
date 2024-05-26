@@ -28,6 +28,10 @@ useHead({
     { name: 'theme-color', content: '#000000'}
   ]
 })
+useSeoMeta({
+  title: 'IllumiNYti',
+  description: 'The New Amsterdam Society'
+})
 
 // import { useOperationsStore } from '@/stores/operationsStore';
 // import { useInstructionsStore } from '@/stores/instructionsStore';

@@ -21,7 +21,11 @@
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 3 / 4; transform: rotate(18deg);" />
           <div class="screenWrapper">
             <div class="noiseOverlay"></div>
-            <component :is="currentScreenComponent" v-bind="screenData"></component>
+            <component 
+              :is="currentScreenComponent"
+              v-bind="screenData"
+              :key="currentScreenComponentKey">
+            </component>
           </div>
           <div class="screenLabel">
             Serial No. 1375
@@ -69,6 +73,7 @@ import missionsPrinting from '~/components/missionsPrinting.vue';
 import cheatCodeInput from '~/components/cheatCodeInput.vue';
 import cipher from '~/components/cipher.vue';
 import { useOperationsStore } from '~/stores/operationsStore';
+import { useScreenStore } from '~/stores/screenStore'; 
 
 // Use Nuxt's global event bus and other globals
 const { $event } = useNuxtApp();
@@ -76,12 +81,13 @@ const { $event } = useNuxtApp();
 const activeOperationStore = useActiveOperationStore();
 const operationsStore = useOperationsStore();
 const unlockedStore = useUnlockedStore();
+const screenStore = useScreenStore();
 const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing();
 
 const isNum = ref(true);
 const code = ref('');
 const cheatCode = ref('');
-const currentScreenComponent = shallowRef(operationsIndex);
+const currentScreenComponent = computed(() => screenStore.currentScreenComponent);
 const screenTimeoutRef = ref(null);
 
 const props = defineProps({
@@ -102,26 +108,34 @@ const screenData = computed(() => ({
   cheatCode: cheatCode.value,
 }));
 
+const currentScreenComponentKey = ref(0);
+
+// watch(currentScreenComponent, async (newComponent, oldComponent) => {
+//   // await nextTick(); // Ensure the DOM is updated
+//   // currentScreenComponentKey.value++; // Change the key to force re-render
+//   // // Perform any additional logic if needed after the component changes
+// });
+
 const lightBulbState = computed(() => {
-  if (currentScreenComponent.value === operationsIndex) {
+  if (screenStore.currentScreenComponent === operationsIndex) {
     return 'off';
   }
-  if (currentScreenComponent.value === relayLocation) {
+  if (screenStore.currentScreenComponent === relayLocation) {
     return 'blinking';
   }
-  if (currentScreenComponent.value === locationFound) {
+  if (screenStore.currentScreenComponent === locationFound) {
     return 'on';
   }
-  if (currentScreenComponent.value === locationNotFound) {
+  if (screenStore.currentScreenComponent === locationNotFound) {
     return 'on';
   }
-  if (currentScreenComponent.value === missionsPrinting) {
+  if (screenStore.currentScreenComponent === missionsPrinting) {
     return 'blinking';
   }
-  if (currentScreenComponent.value === cheatCodeInput) {
+  if (screenStore.currentScreenComponent === cheatCodeInput) {
     return 'blinking';
   }
-  if (currentScreenComponent.value === cipher) {
+  if (screenStore.currentScreenComponent === cipher) {
     return 'on';
   }
   if (isPeeking.value) {
@@ -138,7 +152,7 @@ function lightClick() {
   if (lightTimeout) {
     clearTimeout(lightTimeout);
     lightTimeout = null;
-    currentScreenComponent.value = cheatCodeInput;
+    screenStore.setScreen(cheatCodeInput);
   } else {
     lightTimeout = setTimeout(() => {
       lightTimeout = null;
@@ -151,7 +165,7 @@ function batteryClick() {
   if (batteryTimeout) {
     clearTimeout(batteryTimeout);
     batteryTimeout = null;
-    currentScreenComponent.value = operationsIndex;
+    screenStore.setScreen(operationsIndex);
     activeOperationStore.setActiveOperationId(null);
   } else {
     batteryTimeout = setTimeout(() => {
@@ -161,30 +175,29 @@ function batteryClick() {
 }
 
 async function handleRelayLocation() {
-  currentScreenComponent.value = relayLocation;
+  screenStore.setScreen(relayLocation);
   await checkLocation().then(async () => {
     if (isWithinGeofence.value) {
       console.log('Location found:', isWithinGeofence.value);
       activeOperationStore.setActiveOperationId(isWithinGeofence.value.id);
-      currentScreenComponent.value = locationFound;
+      screenStore.setScreen(locationFound);
       screenTimeoutRef.value = setTimeout(async () => {
-        currentScreenComponent.value = cipher;
-      }, 2000);
+        screenStore.setScreen(cipher);
+      }, 4000);
     } else {
-      currentScreenComponent.value = locationNotFound;
+      screenStore.setScreen(locationNotFound);
       screenTimeoutRef.value = setTimeout(() => {
-        currentScreenComponent.value = operationsIndex;
-      }, 2000);
+        screenStore.setScreen(operationsIndex);
+      }, 4000);
     }
   });
 }
 
 function handleKeyPress(character, isOverride = false) {
-  if (currentScreenComponent.value === cheatCodeInput && !isNum.value) {
+  if (screenStore.currentScreenComponent === cheatCodeInput && !isNum.value) {
     $event.$emit('shakeInput');
     return;
-  } else if (currentScreenComponent.value === cheatCodeInput) {
-    //if cheatCode.value.length is greater than 6 return
+  } else if (screenStore.currentScreenComponent === cheatCodeInput) {
     if (cheatCode.value.length >= 6 && !isOverride) {
       return;
     } else if (isOverride) {
@@ -192,7 +205,7 @@ function handleKeyPress(character, isOverride = false) {
     } else {
       cheatCode.value += character;
     }
-  } else if (activeOperation.value && currentScreenComponent.value === cipher) {
+  } else if (activeOperation.value && screenStore.currentScreenComponent === cipher) {
     const maxCodeLength = activeOperation.value.code.length;
     if (code.value.length >= maxCodeLength && !isOverride) {
       return;
@@ -205,12 +218,12 @@ function handleKeyPress(character, isOverride = false) {
 }
 
 const handleBackspace = () => {
-  if (currentScreenComponent.value === cheatCodeInput) {
+  if (screenStore.currentScreenComponent === cheatCodeInput) {
     if (cheatCode.value.length > 0) {
       cheatCode.value = cheatCode.value.slice(0, -1);
     }
   }
-  if (currentScreenComponent.value === cipher) {
+  if (screenStore.currentScreenComponent === cipher) {
     if (code.value.length > 0) {
       code.value = code.value.slice(0, -1);
     }
