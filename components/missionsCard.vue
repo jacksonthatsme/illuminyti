@@ -9,14 +9,16 @@
           {{ mission.points }} Point<template v-if="mission.points > 1">s</template>
         </div>
       </div>
-      <div class="missionContent">{{ mission.content }}</div>
+      <div class="missionContent" :ref="setMissionContentRefs">{{ mission.content }}</div>
     </div>
     <div class="emblemOverlay"></div>
   </div>
 </template>
 
 <script setup>
+import { useResizeText } from '~/composables/useResizeText'; // Import the composable
 const props = defineProps(['missions'])
+const missionContentRefs = reactive([]);
 
 const missionLabel = computed(() => {
   // Access mission.points inside the function
@@ -33,6 +35,22 @@ const missionLabel = computed(() => {
     }
   }
 })
+// Use the composable
+const { resizeText } = useResizeText();
+
+const setMissionContentRefs = (el) => {
+  if (el && !missionContentRefs.includes(el)) {
+    missionContentRefs.push(el);
+  }
+};
+
+onMounted(() => {
+  nextTick(() => {
+    if (missionContentRefs.length) {
+      resizeText({ elements: missionContentRefs });
+    }
+  });
+});
 </script>
 
 <style lang="scss" scoped>

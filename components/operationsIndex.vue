@@ -56,6 +56,7 @@
 <script setup>
   import { ref, computed } from 'vue'
   import { useUnlockedStore } from '~/stores/unlocked';
+  import { useResizeText } from '~/composables/useResizeText';
 
   const unlockedStore = useUnlockedStore();
   const props = defineProps({
@@ -89,47 +90,22 @@
     }
   }
 
-  const isOverflown = (element) => {
-    return element.scrollHeight > element.clientHeight;
-  };
+// Use the composable
+const { resizeText } = useResizeText();
 
-  const resizeText = ({
-    elements,
-    minSize = 15,
-    maxSize = 28,
-    step = .5,
-    unit = 'px',
-    lineHeightMultiplier = 1.2 // Default line-height multiplier
-  }) => {
-    elements.forEach(element => {
-      let i = minSize;
-      let overflow = false;
+const setClueRefs = (el) => {
+  if (el && !clueRefs.includes(el)) {
+    clueRefs.push(el);
+  }
+};
 
-      while (!overflow && i < maxSize) {
-        element.style.fontSize = `${i}${unit}`;
-        element.style.lineHeight = `${i * lineHeightMultiplier}${unit}`; // Set line-height based on current font size
-        overflow = isOverflown(element);
-        if (!overflow) i += step;
-      }
-
-      // Once overflow is detected, revert to the last non-overflow size and adjust line-height accordingly
-      element.style.fontSize = `${i - step}${unit}`;
-      element.style.lineHeight = `${(i - step) * lineHeightMultiplier}${unit}`;
-    });
-  };
-  const setClueRefs = el => {
-    if (el && !clueRefs.includes(el)) {
-      clueRefs.push(el);
+onMounted(() => {
+  nextTick(() => {
+    if (clueRefs.length) {
+      resizeText({ elements: clueRefs });
     }
-  };
-
-  onMounted(() => {
-    nextTick(() => {
-      if (clueRefs.length) {
-        resizeText({ elements: clueRefs });
-      }
-    });
   });
+});
 
   watch(() => props.operations, () => {
     nextTick(() => {

@@ -102,6 +102,8 @@
     flex-grow: 0;
     min-height: 0;
     mix-blend-mode: multiply;
+    filter: blur(.1px) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.3));
+    opacity: 0.8;
   }
 
   .envelopeTitle {
