@@ -23,9 +23,9 @@ onMounted(async () => {
   await nextTick();
   if (spriteContainer.value) {
     console.log('Child component is mounted');
-    $gsap.to(spriteContainer.value, 1.4, {
-      backgroundPosition: ((spriteContainer.value.offsetWidth * 24)*-1) + "px center",
-      ease: "steps(24)"
+    $gsap.to(spriteContainer.value, 1.1, {
+      backgroundPosition: ((spriteContainer.value.offsetWidth * 20)*-1) + "px center",
+      ease: "steps(20)"
     });
   }
 });

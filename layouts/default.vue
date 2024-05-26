@@ -9,7 +9,7 @@ const device = useDevice()
 const { $event } = useNuxtApp()
 const isFullscreen = computed(() => {
   if(process.env.NODE_ENV === "development") {
-    return true
+    return false
   } else if (device.isFullscreen) {
     return true
   } else {

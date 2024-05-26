@@ -35,14 +35,15 @@
   const pwaInstructions = computed(() => {
     if (device.isIos && device.isSafari) { 
       return [
-        {image: 'pwa-instruction-ios-02', content: 'Tap the share icon'},
-        {image: 'pwa-instruction-ios-03', content: 'Tap Add to Home Screen'},
+        {image: 'pwa-instruction-ios-01', content: 'Tap the share icon'},
+        {image: 'pwa-instruction-ios-02', content: 'Scroll to add to home screen'},
+        {image: 'pwa-instruction-ios-03', content: 'Confirm add to home screen'},
       ];
     } else if (device.isIos && !device.isSafari) {
       return [
-        {image: 'pwa-instruction-ios-01', content: 'Open this page in Safari'},
-        {image: 'pwa-instruction-ios-02', content: 'Tap the share button'},
-        {image: 'pwa-instruction-ios-03', content: 'Tap "Add to Home Screen"'},
+        {image: 'pwa-instruction-chrome-01', content: 'Tap the share icon'},
+        {image: 'pwa-instruction-chrome-02', content: 'Scroll to add to home screen'},
+        {image: 'pwa-instruction-chrome-03', content: 'Confirm add to home screen'},
       ];
     } else if (device.isAndroid) {
       return [
@@ -138,14 +139,15 @@
 
   .instructionsContainer {
     margin-top: 100dvh;
-    background-color: white;
     position: absolute;
     z-index: 11;
     padding: 10vw 5vw;
-    background: url('/assets/images/PaperTexture.png'), #F7F7E7;
-    background-repeat: repeat, no-repeat;
-    background-size: 100px, cover;
-    background-blend-mode: hard-light, normal;
+    border-image-source: url('/assets/images/missionBG.png');
+    border-image-slice: 25 30 fill;
+    border-width: 8px;
+    border-image-repeat: stretch;
+    border-style: solid;
+    border-bottom: none;
   }
   .instructionImage {
     width: 100%;
