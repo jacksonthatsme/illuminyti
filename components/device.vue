@@ -28,7 +28,7 @@
             </component>
           </div>
           <div class="screenLabel">
-            Serial No. 1375
+            ny.vrs.10
           </div>
         </div>
         <div class="punchOuts">
@@ -70,6 +70,7 @@ import relayLocation from '~/components/relayLocation.vue';
 import locationNotFound from '~/components/locationNotFound.vue';
 import locationFound from '~/components/locationFound.vue';
 import missionsPrinting from '~/components/missionsPrinting.vue';
+import codeAccepted from '~/components/codeAccepted.vue';
 import cheatCodeInput from '~/components/cheatCodeInput.vue';
 import cipher from '~/components/cipher.vue';
 import { useOperationsStore } from '~/stores/operationsStore';
@@ -235,26 +236,30 @@ const handleEnter = () => {
     const matchingOperationId = operations.find(op => op['cheat-code'] == cheatCode.value)?.id;
     if (matchingOperationId) {
       activeOperationStore.setActiveOperationId(matchingOperationId);
-      currentScreenComponent.value = locationFound;
+      screenStore.setScreen(locationFound)
       screenTimeoutRef.value = setTimeout(() => {
-        currentScreenComponent.value = cipher;
+        screenStore.setScreen(cipher)
         cheatCode.value = '';
-      }, 2000);
+      }, 4000);
     } else {
       cheatCode.value = '';
       $event.$emit('shakeInput');
     }
   }
+  
   if (activeOperation.value) {
     var currentCode = code.value.toLowerCase();
     var accessCode = activeOperation.value.code.toLowerCase();
     if (currentCode === accessCode) {
       unlockedStore.unlockOperation(activeOperation.value.id);
-      currentScreenComponent.value = missionsPrinting;
+      screenStore.setScreen(codeAccepted);
       screenTimeoutRef.value = setTimeout(() => {
-        currentScreenComponent.value = operationsIndex;
-        activeOperationStore.setActiveOperationId(null);
-      }, 2000);
+        screenStore.setScreen(missionsPrinting);
+        screenTimeoutRef.value = setTimeout(() => {
+          screenStore.setScreen(operationsIndex)
+          activeOperationStore.setActiveOperationId(null);
+        }, 4000);
+      }, 4000);
     } else {
       code.value = '';
       $event.$emit('shakeInput');

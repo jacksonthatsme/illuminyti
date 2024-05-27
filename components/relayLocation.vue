@@ -11,7 +11,6 @@
     justify-content: center;
     align-items: center;
     padding: 32px;
-    mix-blend-mode: multiply;
     font-family: 'Offbit';
     background-image: url('/assets/images/relayLocationLoop.gif');
     background-size: cover;

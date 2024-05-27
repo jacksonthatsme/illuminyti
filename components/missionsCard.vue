@@ -36,7 +36,7 @@ const missionLabel = computed(() => {
   }
 })
 // Use the composable
-const { resizeText } = useResizeText();
+const { resizeText } = useResizeText({ maxSize: 24 });
 
 const setMissionContentRefs = (el) => {
   if (el && !missionContentRefs.includes(el)) {

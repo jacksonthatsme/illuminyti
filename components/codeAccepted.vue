@@ -1,9 +1,8 @@
 <template>
-  <div class="locationFoundContainer">
-    <h2>code successful</h2>
-    <img src="/images/screen/printing.png" alt="">
-    <h1>Printing<br/>
-new missions</h1>
+  <div class="container">
+    <h2>Nice work</h2>
+    <h1>Code Accepted</h1>
+    <h2>you did it</h2>
   </div>
 </template>
 <script setup> 
@@ -16,7 +15,7 @@ new missions</h1>
 </script>
 <style lang="scss" scoped>
 
-.locationFoundContainer {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,12 +45,12 @@ new missions</h1>
   }
   h1 {
     font-family: 'Eurostile';
-    line-height: 1.5;
+    line-height: 1.1;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-align: center;
-    font-size: 24px;
+    font-size: 36px;
   }
 }
 </style>
