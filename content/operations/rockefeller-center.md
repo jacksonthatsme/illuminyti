@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Sitting in relief, find wisdom, watching over prometheus
+Witness wisdom, Sitting in relief, watching over prometheus as the tourists skate by.

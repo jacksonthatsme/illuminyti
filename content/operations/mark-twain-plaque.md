@@ -1,6 +1,6 @@
 ---
 name: Mark Twain Plaque
-code: animals
+code: fickle
 id: m-t-p
 cheat-code: 555555
 hidden: false
@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Where a literary giant made his mark. Find the plaque, near the park.
+Track down the townhouse where a literary mark was made. Find the plaque near the park.

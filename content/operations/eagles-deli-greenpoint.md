@@ -1,8 +1,8 @@
 ---
-name: Barthman's Sidewalk Clock
-code: clock
-cheat-code: 666666
-id: b-s-c
+name: Eagle's Deli
+code: torrent
+cheat-code: 151515
+id: e-d-g
 hidden: false
 polygon:
   - { latitude: 40.6728405, longitude: -73.9680708 }
@@ -20,4 +20,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Seek the timely treasure beneath your feet, Where minutes are marked by the steps of the elite
+Eagles Deli

@@ -246,23 +246,24 @@ const handleEnter = () => {
       $event.$emit('shakeInput');
     }
   }
-  
-  if (activeOperation.value) {
-    var currentCode = code.value.toLowerCase();
-    var accessCode = activeOperation.value.code.toLowerCase();
-    if (currentCode === accessCode) {
-      unlockedStore.unlockOperation(activeOperation.value.id);
-      screenStore.setScreen(codeAccepted);
-      screenTimeoutRef.value = setTimeout(() => {
-        screenStore.setScreen(missionsPrinting);
+  if (currentScreenComponent.value === cipher) {
+    if (activeOperation.value) {
+      var currentCode = code.value.toLowerCase();
+      var accessCode = activeOperation.value.code.toLowerCase();
+      if (currentCode === accessCode) {
+        unlockedStore.unlockOperation(activeOperation.value.id);
+        screenStore.setScreen(codeAccepted);
         screenTimeoutRef.value = setTimeout(() => {
-          screenStore.setScreen(operationsIndex)
-          activeOperationStore.setActiveOperationId(null);
-        }, 4000);
-      }, 4000);
-    } else {
-      code.value = '';
-      $event.$emit('shakeInput');
+          screenStore.setScreen(missionsPrinting);
+          screenTimeoutRef.value = setTimeout(() => {
+            screenStore.setScreen(operationsIndex)
+            activeOperationStore.setActiveOperationId(null);
+          }, 4000);
+        }, 2000);
+      } else {
+        code.value = '';
+        $event.$emit('shakeInput');
+      }
     }
   }
 };

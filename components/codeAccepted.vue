@@ -1,17 +1,34 @@
 <template>
   <div class="container">
-    <h2>Nice work</h2>
-    <h1>Code Accepted</h1>
-    <h2>you did it</h2>
+    <h2>Code Accepted</h2>
+    <div class="spriteContainer" ref="spriteContainer"></div>
+    <h2>+4 points</h2>
   </div>
 </template>
-<script setup> 
-  const props = defineProps({
-    operations: {
-      type: Array,
-      required: true
-    }, 
-  })
+<script setup lang="ts">
+import { onMounted, ref, nextTick } from 'vue';
+import { useNuxtApp } from '#app';
+
+const props = defineProps({
+  operations: {
+    type: Array,
+    required: true
+  }
+});
+
+const { $gsap } = useNuxtApp();
+const spriteContainer = ref(null);
+
+onMounted(async () => {
+  await nextTick();
+  if (spriteContainer.value) {
+    console.log('Child component is mounted');
+    $gsap.to(spriteContainer.value, 1.9, {
+      backgroundPosition: ((spriteContainer.value.offsetWidth * 22)*-1) + "px center",
+      ease: "steps(22)"
+    });
+  }
+});
 </script>
 <style lang="scss" scoped>
 
@@ -51,6 +68,19 @@
     letter-spacing: 1px;
     text-align: center;
     font-size: 36px;
+  }
+  .spriteContainer {
+    max-height: 180px;
+    height: auto;
+    display: block;
+    flex: 1;
+    aspect-ratio: 1/1;
+    margin-bottom: 10px;
+    height: 0;
+    background-image: url('/images/screen/plus-four-sprite.png');
+    background-size: cover;
+    background-position: 0px;
+    background-repeat: no-repeat;
   }
 }
 </style>
