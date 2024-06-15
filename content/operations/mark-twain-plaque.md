@@ -13,10 +13,10 @@ polygon:
 missions:
   - points: 1
     content: 'A photo with a team member peaking inside the IFC peephole.'
-  - points: 3
+  - points: 2
     content: 'Do the Harlem shake in front of a shake shack'
-  - points: 5
+  - points: 3
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Track down the townhouse where a literary mark was made. Find the plaque near the park.
+Track down the townhouse where a literary icon made his mark. Find the plaque near the park.

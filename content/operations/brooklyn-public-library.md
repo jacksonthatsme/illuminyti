@@ -14,10 +14,10 @@ polygon:
 missions:
   - points: 1
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
-  - points: 3
+  - points: 2
     content: 'Make like a Boston City Cop and tumble down a slide. Get the scene on video for 3 points.'
-  - points: 5
+  - points: 3
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Find a fortress of leather-bound ranks overlooking a large army
+Find the fortress of leather-bound ranks opposing a large battalion of soldiers and sailors

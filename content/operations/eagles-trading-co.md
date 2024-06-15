@@ -1,8 +1,8 @@
 ---
-name: Eagle's Deli
+name: Eagle Trading Co.
 code: torrent
 cheat-code: 151515
-id: e-d-g
+id: e-t-c
 hidden: false
 polygon:
   - { latitude: 40.6728405, longitude: -73.9680708 }
@@ -14,9 +14,9 @@ polygon:
 missions:
   - points: 1
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
-  - points: 3
+  - points: 2
     content: 'Make like a Boston City Cop and tumble down a slide. Get the scene on video for 3 points.'
-  - points: 5
+  - points: 3
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 

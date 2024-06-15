@@ -26,9 +26,9 @@ const missionLabel = computed(() => {
     const points = mission.points
     if (points === 1) {
       return 'Reconaissance'
-    } else if (points === 3) {
+    } else if (points === 2) {
       return 'Infiltration'
-    } else if (points === 5) {
+    } else if (points === 3) {
       return 'Propaganda'
     } else {
       return 'Mission'
