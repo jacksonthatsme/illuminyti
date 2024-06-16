@@ -1,9 +1,12 @@
 <template>
   <div class="locationFoundContainer">
-    <h2>code successful</h2>
+    <h2>Operation Complete</h2>
     <img src="/images/screen/printing.png" alt="">
-    <h1>Printing<br/>
-new missions</h1>
+    <h1>
+      Printing
+      <br/>
+      new missions
+    </h1>
   </div>
 </template>
 <script setup> 

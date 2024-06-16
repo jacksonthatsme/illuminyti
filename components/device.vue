@@ -24,7 +24,8 @@
             <component 
               :is="currentScreenComponent"
               v-bind="screenData"
-              :key="currentScreenComponentKey">
+              :key="currentScreenComponentKey"
+              @send-home="resetView">
             </component>
           </div>
           <div class="screenLabel">
@@ -76,7 +77,6 @@ import cipher from '~/components/cipher.vue';
 import { useOperationsStore } from '~/stores/operationsStore';
 import { useScreenStore } from '~/stores/screenStore'; 
 
-// Use Nuxt's global event bus and other globals
 const { $event } = useNuxtApp();
 
 const activeOperationStore = useActiveOperationStore();
@@ -110,12 +110,6 @@ const screenData = computed(() => ({
 }));
 
 const currentScreenComponentKey = ref(0);
-
-// watch(currentScreenComponent, async (newComponent, oldComponent) => {
-//   // await nextTick(); // Ensure the DOM is updated
-//   // currentScreenComponentKey.value++; // Change the key to force re-render
-//   // // Perform any additional logic if needed after the component changes
-// });
 
 const lightBulbState = computed(() => {
   if (screenStore.currentScreenComponent === operationsIndex) {
@@ -259,7 +253,7 @@ const handleEnter = () => {
             screenStore.setScreen(operationsIndex)
             activeOperationStore.setActiveOperationId(null);
           }, 4000);
-        }, 2000);
+        }, 4000);
       } else {
         code.value = '';
         $event.$emit('shakeInput');
@@ -267,6 +261,15 @@ const handleEnter = () => {
     }
   }
 };
+
+const resetView = () => {
+  console.log('resetting view');
+  screenStore.setScreen(operationsIndex);
+  activeOperationStore.setActiveOperationId(null);
+  code.value = '';
+  cheatCode.value = '';
+  clearTimeout(screenTimeoutRef.value);
+}
 </script>
 
 <style lang="scss" scoped>

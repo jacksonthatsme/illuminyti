@@ -155,6 +155,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 24px;
 }
 .operationStatus {
   flex: 0 0 auto;

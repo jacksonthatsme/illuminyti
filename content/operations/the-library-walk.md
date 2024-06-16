@@ -1,5 +1,5 @@
 ---
-name: The Library Walk
+name: The Library Way
 code: cabal
 cheat-code: 333333
 hidden: false

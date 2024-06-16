@@ -23,9 +23,9 @@ onMounted(async () => {
   await nextTick();
   if (spriteContainer.value) {
     console.log('Child component is mounted');
-    $gsap.to(spriteContainer.value, 1.9, {
-      backgroundPosition: ((spriteContainer.value.offsetWidth * 22)*-1) + "px center",
-      ease: "steps(22)"
+    $gsap.to(spriteContainer.value, 1, {
+      backgroundPosition: ((spriteContainer.value.offsetWidth * 20)*-1) + "px center",
+      ease: "steps(20)"
     });
   }
 });
@@ -74,7 +74,7 @@ onMounted(async () => {
     height: auto;
     display: block;
     flex: 1;
-    aspect-ratio: 1/1;
+    aspect-ratio: 27/20;
     margin-bottom: 10px;
     height: 0;
     background-image: url('/images/screen/plus-four-sprite.png');
