@@ -1,6 +1,6 @@
 ---
 name: Prison Ship Martyrs Monument
-code: prison
+code: cannon
 id: p-s-s
 cheat-code: 777777
 hidden: false

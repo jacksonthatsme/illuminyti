@@ -1,6 +1,6 @@
 ---
 name: Subway Map Floating on a City Sidewalk
-code: prince
+code: rhombus
 cheat-code: 444444
 id: f-s-m
 hidden: false

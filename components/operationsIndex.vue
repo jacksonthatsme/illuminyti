@@ -16,7 +16,7 @@
         bulletElement: 'div',
       }"
       >
-      <SwiperSlide class="operationDisplay" v-for="operation in props.operations" :key="operation.id">
+      <SwiperSlide class="operationDisplay" v-for="operation in props.operations" :key="operation.id" :class="{completed: lockStatus(operation.id)}">
         <div class="operationStatus">
           <div v-if="lockStatus(operation.id)">
             <svg width="39" height="66" viewBox="0 0 39 66" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -171,12 +171,13 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px;
 }
 .swiperPagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 2%;
 }
 .swiperBullet {
   width: 6px;
@@ -186,6 +187,9 @@ onMounted(() => {
   display: inline-block;
 }
 .swiperNext, .swiperPrev {
-  padding: 16px 24px;
+  // padding: 16px 24px;
+}
+.completed {
+  opacity: .5;
 }
 </style>

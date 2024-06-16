@@ -1,6 +1,6 @@
 ---
 name: Barthman's Sidewalk Clock
-code: clock
+code: '0314'
 cheat-code: 666666
 id: b-s-c
 hidden: false

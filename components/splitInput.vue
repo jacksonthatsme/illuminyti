@@ -1,13 +1,19 @@
 <template>
   <div class="splitInput" ref="inputRef">
-    <input
-      type="text"
-      class="inputSlot"
+    <div
       v-for="(el, ind) in slots"
       :key="el+ind"
-      v-model="slots[ind]"
-      maxlength="1"
+      class="inputSlotContainer"
     >
+      <input
+        type="text"
+        class="inputSlot"
+        v-model="slots[ind]"
+        maxlength="1"
+        readonly
+      >
+      <div v-if="ind === cursorIndex && !(cursorIndex === props.inputCount - 1 && slots[props.inputCount - 1])" class="cursor"></div>
+    </div>
   </div>
 </template>
 <script setup>
@@ -27,8 +33,6 @@
   const inputShake = $gsap.timeline({paused: true});
   
   const shakeInput = () => {
-    // console.log('shakeInput')
-    // inputShake.play();
     $gsap.to('.splitInput', .1, {
       x: -7,
       ease: "power3.inOut"
@@ -65,37 +69,33 @@
     });
   }
 
+  const slots = reactive(Array(props.inputCount).fill(''));
+  const cursorIndex = ref(0);
 
-
-  const slots = reactive([])
-  for (let i =0; i < props.inputCount; i++) {
-      slots[i] = null;
-  }
-
-  watch(()=>props.code, (newVal, oldVal) => {
-    //  console.log(newVal.slice(0, props.inputCount));
-     for (let i =0; i < props.inputCount; i++) {
-        slots[i] = newVal.charAt(i);
+  watch(() => props.code, (newVal) => {
+    for (let i = 0; i < props.inputCount; i++) {
+      slots[i] = newVal.charAt(i) || '';
     }
+    cursorIndex.value = Math.min(newVal.length, props.inputCount - 1);
   });
-
-
-  const inputCont = ref(null)
 </script>
-
 <style lang="scss" scoped>
 .splitInput {
   display: flex;
   font-family: 'Dotbit';
   font-weight: 500;
-
 }
-.inputSlot {
+
+.inputSlotContainer {
+  position: relative;
   flex-grow: 1;
+  margin: 5px;
+}
+
+.inputSlot {
   width: 100%;
   background: none;
   outline: none;
-  margin: 5px;
   border-radius: 0px;
   border-style: solid;
   border-width: 0px 0px 3px 0px;
@@ -109,5 +109,23 @@
   user-select: none;
   padding: 0px;
   pointer-events: none;
+}
+
+.cursor {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background-color: #5E5940;
+  opacity: 0.7;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 </style>
