@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-The Lot Radio
+Find the fusion between beats and beans, where broadcasters brew good vibrations with frequency

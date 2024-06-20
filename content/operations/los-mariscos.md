@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Los Mariscos
+In the bustling market beneath the elevated park, find the hidden haven where city meets sea and patrons savor Baja’s finest

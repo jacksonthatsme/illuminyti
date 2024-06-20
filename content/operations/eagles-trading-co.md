@@ -20,4 +20,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Eagles Deli
+Seek to swap with the Regal bird hiding amongst the most alphabetical of Brooklyn streets.

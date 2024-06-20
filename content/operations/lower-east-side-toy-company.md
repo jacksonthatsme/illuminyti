@@ -3,7 +3,7 @@ name: Lower East Side Toy Company
 code: toys
 id: l-t-c
 cheat-code: 141414
-hidden: false
+hidden: true
 polygon:
   - { latitude: 40.7338414, longitude: -73.9964592 }
   - { latitude: 40.7337479, longitude: -73.9965289 }

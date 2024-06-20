@@ -19,4 +19,4 @@ missions:
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'
 ---
 
-Stroll where the sidewalk speaks, guiding the path to the lion's den.
+Stroll where the sidewalk speaks, guiding the path to the lion's den
