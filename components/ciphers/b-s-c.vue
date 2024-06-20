@@ -34,7 +34,7 @@
   .hint {
     font-size: 24px;
     line-height: 1.5;
-    letter-spacing: .1em;
+    letter-spacing: .05em;
     
     span {
       margin: 0 20px;
@@ -45,20 +45,6 @@
     position: relative;
     margin-top: 32px;
     margin-bottom: 32px;
-
-    // &:after{
-    //   position: absolute;
-    //   width: 100%;
-    //   height: 100%;
-    //   top: 0;
-    //   left: 0;
-    //   bottom: 0;
-    //   right: 0;
-    //   content: ':';
-    //   text-align: center;
-    //   font-size: 48px;
-    //   vertical-align: center;
-    //   }
   }
   .inputDivider {
     position: absolute;
@@ -69,7 +55,7 @@
     bottom: 0;
     right: 0;
     text-align: center;
-    font-size: 48px;
+    font-size: 36px;
     vertical-align: center;
   }
 </style>

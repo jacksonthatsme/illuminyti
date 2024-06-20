@@ -1,7 +1,7 @@
 ---
 name: Donut Plant
 code: donuts
-cheat-code: 33333
+cheat-code: 333333
 id: d-n-p
 hidden: true
 polygon:

@@ -2,7 +2,7 @@
 name: Los Mariscos
 code: pacific
 id: l-m-s
-cheat-code: 101010
+cheat-code: 161616
 hidden: false
 polygon:
   - { latitude: 40.7338414, longitude: -73.9964592 }

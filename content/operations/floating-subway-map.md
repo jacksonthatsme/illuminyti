@@ -1,5 +1,5 @@
 ---
-name: Subway Map Floating on a City Sidewalk
+name: Subway Map Floating on a New York Sidewalk
 code: rhombus
 cheat-code: 444444
 id: f-s-m

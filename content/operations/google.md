@@ -1,7 +1,7 @@
 ---
 name: Google
 code: lab
-cheat-code: 66666
+cheat-code: 666666
 id: g-c-l
 hidden: true
 polygon:

@@ -245,9 +245,9 @@ const handleEnter = () => {
       var currentCode = code.value.toLowerCase();
       var accessCode = activeOperation.value.code.toLowerCase();
       if (currentCode === accessCode) {
-        unlockedStore.unlockOperation(activeOperation.value.id);
         screenStore.setScreen(codeAccepted);
         screenTimeoutRef.value = setTimeout(() => {
+          unlockedStore.unlockOperation(activeOperation.value.id);
           screenStore.setScreen(missionsPrinting);
           screenTimeoutRef.value = setTimeout(() => {
             screenStore.setScreen(operationsIndex)

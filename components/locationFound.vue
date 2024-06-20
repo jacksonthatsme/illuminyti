@@ -95,7 +95,7 @@ onMounted(async () => {
   }
   h1 {
     font-family: 'Eurostile';
-    line-height: 1.5;
+    line-height: 1.1;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;

@@ -12,7 +12,7 @@
         maxlength="1"
         readonly
       >
-      <div v-if="ind === cursorIndex && !(cursorIndex === props.inputCount - 1 && slots[props.inputCount - 1])" class="cursor"></div>
+      <div v-if="ind === cursorIndex && !(cursorIndex === props.inputCount - 1 && slots[props.inputCount - 1]) && showCursor" class="cursor"></div>
     </div>
   </div>
 </template>
@@ -50,7 +50,6 @@
     });
   }
 
-
   onMounted: () => {
     inputShake.to('.splitInput', .1, {
       x: -7,
@@ -71,12 +70,17 @@
 
   const slots = reactive(Array(props.inputCount).fill(''));
   const cursorIndex = ref(0);
+  const showCursor = ref(true);
 
-  watch(() => props.code, (newVal) => {
+  watch(() => props.code, (newVal, oldVal) => {
     for (let i = 0; i < props.inputCount; i++) {
       slots[i] = newVal.charAt(i) || '';
     }
     cursorIndex.value = Math.min(newVal.length, props.inputCount - 1);
+    showCursor.value = false;
+    setTimeout(() => {
+      showCursor.value = true;
+    }, 1000);
   });
 </script>
 <style lang="scss" scoped>
@@ -113,13 +117,13 @@
 
 .cursor {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
-  height: 100%;
+  height: 70%;
   background-color: #5E5940;
-  opacity: 0.7;
+  opacity: 0.3;
   animation: blink 1s step-end infinite;
 }
 

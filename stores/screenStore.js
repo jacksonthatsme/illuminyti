@@ -10,7 +10,7 @@ import codeAccepted from '~/components/codeAccepted.vue';
 
 export const useScreenStore = defineStore('screenStore', {
   state: () => ({
-    currentScreenComponent: shallowRef(locationFound),
+    currentScreenComponent: shallowRef(operationsIndex),
   }),
   actions: {
     setScreen(component) {

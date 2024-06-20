@@ -2,7 +2,7 @@
 name: Moynihan Train Hall
 code: badass
 id: m-t-h
-cheat-code: 444444
+cheat-code: 101010
 hidden: false
 polygon:
   - { latitude: 40.75268823209154, longitude: -73.99676549905729 }
