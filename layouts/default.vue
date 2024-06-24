@@ -1,10 +1,14 @@
 <template>
-  <install v-if="!isFullscreen"></install>  
-  <main v-if="isFullscreen" :class="{'scroll-lock': isScrollLocked}">
-    <slot />
-  </main>
+  <ClientOnly>
+    <install v-if="!isFullscreen"></install>  
+    <main v-if="isFullscreen" :class="{'scroll-lock': isScrollLocked}">
+      <slot />
+    </main>
+  </ClientOnly>
 </template>
 <script setup>
+import { useTutorialStatus } from '~/stores/tutorialStatusStore';
+const tutorialStatus = useTutorialStatus();
 const device = useDevice()
 const { $event } = useNuxtApp()
 const isFullscreen = computed(() => {
@@ -16,12 +20,17 @@ const isFullscreen = computed(() => {
     return false
   }
 })
-const isScrollLocked = ref(true)
+const isScrollLocked = computed(() => {
+  return !tutorialStatus.tutorialCompleted;
+});
 
-$event.$on('tutorialComplete', (e) => {
-  isScrollLocked.value = false
-})
-
+watch(
+  () => tutorialStatus.tutorialCompleted,
+  (newVal) => {
+    console.log('Tutorial completion status:', newVal);
+  },
+  { immediate: true }
+);
 </script>
 
 <style lang="scss" scoped>

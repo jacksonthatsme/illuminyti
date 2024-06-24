@@ -9,34 +9,36 @@
           {{ mission.points }} Point<template v-if="mission.points > 1">s</template>
         </div>
       </div>
-      <div class="missionContent" :ref="setMissionContentRefs">{{ mission.content }}</div>
+      <div class="missionContent" :ref="setMissionContentRefs"><p>{{ mission.content }}</p></div>
     </div>
     <div class="emblemOverlay"></div>
   </div>
 </template>
 
 <script setup>
+import { ref, reactive, onMounted, nextTick, watch, computed } from 'vue';
 import { useResizeText } from '~/composables/useResizeText'; // Import the composable
-const props = defineProps(['missions'])
+
+const props = defineProps(['missions']);
 const missionContentRefs = reactive([]);
 
+// Use the composable
+const { resizeText } = useResizeText({ maxSize: 24, minSize: 12 });
+
 const missionLabel = computed(() => {
-  // Access mission.points inside the function
   return (mission) => {
-    const points = mission.points
+    const points = mission.points;
     if (points === 1) {
-      return 'Reconaissance'
+      return 'Reconaissance';
     } else if (points === 2) {
-      return 'Infiltration'
+      return 'Infiltration';
     } else if (points === 3) {
-      return 'Propaganda'
+      return 'Propaganda';
     } else {
-      return 'Mission'
+      return 'Mission';
     }
   }
-})
-// Use the composable
-const { resizeText } = useResizeText({ maxSize: 24 });
+});
 
 const setMissionContentRefs = (el) => {
   if (el && !missionContentRefs.includes(el)) {
@@ -44,21 +46,32 @@ const setMissionContentRefs = (el) => {
   }
 };
 
-onMounted(() => {
+const runResizeText = () => {
   nextTick(() => {
     if (missionContentRefs.length) {
+      console.log('runningResizeText');
       resizeText({ elements: missionContentRefs });
     }
   });
-});
+};
+
+onMounted(runResizeText);
+
+// Watch for changes in missions and rerun resizeText
+watch(() => props.missions, () => {
+  missionContentRefs.length = 0; // Reset the refs array
+  nextTick(runResizeText);
+}, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
   .missionsCard {
     height: 100%;
     width: 100%;
-    display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
+    // display: grid;
+    // grid-auto-rows: minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     padding: 30px 10px;
     border-image-source: url('/assets/images/missionBG.png');
     border-image-slice: 25 30 fill;
@@ -77,6 +90,11 @@ onMounted(() => {
     border-right: 1px solid #272727;
     border-left: 1px solid #272727;
     color: #1C1C1C;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
 
     &:first-child {
       border-top: 1px solid #272727;
@@ -108,6 +126,9 @@ onMounted(() => {
     line-height: 24px;
     font-weight: 300;
     text-transform: none;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
   }
   .emblemOverlay {
     position: absolute;

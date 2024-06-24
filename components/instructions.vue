@@ -46,6 +46,7 @@ onMounted(async () => {
         }
         if (swiper.value.activeIndex === tutorialPages.length) {
           $event.$emit('tutorialComplete');
+
         }
       });
 

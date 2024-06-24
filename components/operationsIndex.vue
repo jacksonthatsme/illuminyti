@@ -133,10 +133,13 @@ onMounted(() => {
 .operationsContainer {
   width: 100%;
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .operationDisplay {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,67 +1,78 @@
 <template>
-  <ClientOnly>
-    <section class="instructionsSection" id="instructions">
-      <instructions @tutorial-complete="handleTutorialComplete"></instructions>
-    </section>
-    <section class="deviceSection" id="device">
-      <device :is-peeking="isDevicePeeking.value" ref="deviceRef"></device>
-    </section>
-    <section class="missionsSection" id="missions">
-      <missions ref="missionRef"></missions>
-    </section>
-  </ClientOnly>
+  <section class="instructionsSection" id="instructions">
+    <instructions></instructions>
+  </section>
+  <section class="deviceSection" id="device" ref="deviceSectionRef">
+    <device :is-peeking="isDevicePeeking.value" ref="deviceRef"></device>
+  </section>
+  <section class="missionsSection" id="missions">
+    <missions ref="missionRef"></missions>
+  </section>
 </template>
 
 <script setup>
-  const { $gsap, $ScrollToPlugin, $ScrollTrigger, $event} = useNuxtApp()
-  $gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
-  const deviceRef = ref(null)
-  const missionRef = ref(null)
+import { ref, watch, onMounted } from 'vue';
+import { useNuxtApp } from '#app';
+import { useTutorialStatus } from '~/stores/tutorialStatusStore';
 
-  const isDevicePeeking = ref(false)
+const { $gsap, $ScrollToPlugin, $ScrollTrigger, $event } = useNuxtApp();
+$gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
 
-  const handleTutorialComplete = () => {
-    console.log('handleTutorialComplete')
-    isDevicePeeking.value = true
-  }
+const deviceRef = ref(null);
+const missionRef = ref(null);
+const deviceSectionRef = ref(null);
 
-  $event.$on('tutorialComplete', (e) => {
-    console.log('tutorialComplete')
-    isDevicePeeking.value = true
-  })
+const isDevicePeeking = ref(false);
+const tutorialStatus = useTutorialStatus();
 
+$event.$on('tutorialComplete', () => {
+  console.log('tutorialComplete');
+  isDevicePeeking.value = true;
+  tutorialStatus.markTutorialCompleted();
+});
 
-  watch(isDevicePeeking, (newVal) => {
-    if (newVal) {
-      console.log('Device is peeking:', newVal);
-
-      // First animate the device to its final position
-      $gsap.to('.deviceContainer', {
-        y: -240,
-        duration: 1.5,
-        delay: 2,
-        ease: 'power4.out',
-        onComplete: () => {
-          // Create and configure the GSAP timeline after the animation completes
-          const tl = $gsap.timeline({
-            scrollTrigger: {
-              scroller: "main",
-              trigger: '#instructions',
-              start: 'bottom bottom',
-              end: 'bottom top',
-              scrub: true,
-              markers: false  // Enable markers for debugging
-            }
-          });
-
-          // Set the scrubbing animation
-          tl.fromTo('.deviceContainer', { y: -240 }, { y: 0 });
-        }
+onMounted(() => {
+  nextTick(() => {
+    if (tutorialStatus.tutorialCompleted && deviceSectionRef.value) {
+      deviceSectionRef.value.scrollIntoView({
+        behavior: 'auto', // Instant scrolling, use 'smooth' for smooth scrolling
+        block: 'start' // Align to the start (top) of the viewport
       });
     }
   });
+});
 
+watch(isDevicePeeking, (newVal) => {
+  if (newVal) {
+    console.log('Device is peeking:', newVal);
+
+    // First animate the device to its final position
+    $gsap.to('.deviceContainer', {
+      y: -240,
+      duration: 1.5,
+      delay: 2,
+      ease: 'power4.out',
+      onComplete: () => {
+        // Create and configure the GSAP timeline after the animation completes
+        const tl = $gsap.timeline({
+          scrollTrigger: {
+            scroller: "main",
+            trigger: '#instructions',
+            start: 'bottom bottom',
+            end: 'bottom top',
+            scrub: true,
+            markers: false // Enable markers for debugging
+          }
+        });
+
+        // Set the scrubbing animation
+        tl.fromTo('.deviceContainer', { y: -240 }, { y: 0 });
+      }
+    });
+  }
+});
 </script>
+
 
 <style lang="scss" scoped>
   section {
