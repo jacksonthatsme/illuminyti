@@ -59,7 +59,7 @@
       <div class="edge"></div>
     </div>
   </div>
-  <VTour :steps="tourSteps" name="device-tour" ref="tour" :options="tourOptions" />
+  <VTour :steps="tourSteps" name="device-tour" ref="tour" :options="tourOptions" @onTourEnd="handleTourEnd" />
 </template>
 
 <script setup>
@@ -342,10 +342,17 @@ const handleEnter = () => {
 
   //watch for $event.startTour and start tour
   $event.$on('startTour', () => {
-    if (firstRunStore.isFirstRun) {
+    if (!firstRunStore.hasCompletedFirstTour) {
       tour.value?.startTour();
     }
   });
+
+  const handleTourEnd = () => {
+    console.log('tour end')
+    if (!firstRunStore.hasCompletedFirstTour && !firstRunStore.firstCheckpointFound) {
+      firstRunStore.markFirstTourAsCompleted(true);
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

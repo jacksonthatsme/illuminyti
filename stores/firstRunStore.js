@@ -5,6 +5,7 @@ import { defineStore } from 'pinia';
 export const useFirstRunStore = defineStore('firstRun', {
   state: () => ({
     isInstructionsCompleted: false,
+    hasCompletedFirstTour: false,
     hasFoundFirstCheckpoint: false,
     hasUnlockedFirstMission: false,
   }),
@@ -18,9 +19,13 @@ export const useFirstRunStore = defineStore('firstRun', {
     markFirstMissionAsUnlocked(unlocked) {
       this.hasUnlockedFirstMission = unlocked;
     },
+    markFirstTourAsCompleted(completed) {
+      this.hasCompletedFirstTour = completed;
+    }
   },
   getters: {
     instructionsCompleted: (state) => state.isInstructionsCompleted,
+    firstTourCompleted: (state) => state.hasCompletedFirstTour,
     firstCheckpointFound: (state) => state.hasFoundFirstCheckpoint,
     firstMissionUnlocked: (state) => state.hasUnlockedFirstMission,
     isFirstRun: (state) => !state.isInstructionsCompleted && !state.hasFoundFirstCheckpoint && !state.hasUnlockedFirstMission,
