@@ -328,7 +328,7 @@ const handleEnter = () => {
     },
     {
       target: "[data-tour='location-relay']",
-      body: "Relay your location at when at the rendezvous to unlock the cipher",
+      body: "When you get to the rendezvous, relay your location to unlock the cipher",
       popperConfig: {
         placment: 'left'
       }
@@ -352,7 +352,7 @@ const handleEnter = () => {
     if (!firstRunStore.hasCompletedFirstTour) {
       firstRunStore.markFirstTourAsCompleted(true);
     }
-    if (firstRunStore.hasCompletedFirstTour && !firstRunStore.secondCheckpointFound) {
+    if (firstRunStore.hasCompletedFirstTour && firstRunStore.hasFoundFirstCheckpoint &&!firstRunStore.secondCheckpointFound) {
       firstRunStore.markSecondTourAsCompleted(true);
     }
   }
