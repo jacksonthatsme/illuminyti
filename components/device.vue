@@ -19,7 +19,7 @@
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 1 / 2; grid-column: 3 / 4; transform: rotate(45deg);" />
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 1 / 2; transform: rotate(98deg);" />
           <img src="/images/transciever/Screw.png" class="screw" style="grid-row: 3 / 4; grid-column: 3 / 4; transform: rotate(18deg);" />
-          <div class="screenWrapper">
+          <div class="screenWrapper" data-tour="screen-wrapper">
             <div class="noiseOverlay"></div>
             <component 
               :is="currentScreenComponent"
@@ -38,13 +38,13 @@
         <div class="controlsContainer">
           <keypad @key-press="handleKeyPress" @backspace="handleBackspace" @enter="handleEnter" :isNum="isNum"></keypad>
           <div class="rightRail">
-            <div class="dial" @click="dialClick" :class="isNum ? 'numerals' : 'letters'">
+            <div class="dial" @click="dialClick" data-tour="keyboard-dial" :class="isNum ? 'numerals' : 'letters'">
               <img src="/images/transciever/Dial.png" alt="">
               <div class="label">Let</div>
               <div class="label">Num</div>
               <div class="indicator"></div>
             </div>
-            <div class="locationButton" @click="handleRelayLocation">
+            <div class="locationButton" @click="handleRelayLocation"  data-tour="location-relay">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.08578L16.7953 5.88107L15.3811 7.29528L13 4.91421V9.62602C14.7252 10.0701 16 11.6362 16 13.5C16 14.0647 15.8825 14.6032 15.6707 15.0913L20 19.1801V16.3616H22V22.5H15.8102V20.5H18.4848L14.434 16.6743C13.7602 17.1915 12.9161 17.5 12 17.5C11.0839 17.5 10.2398 17.1915 9.56599 16.6743L5.51523 20.5H8.18976V22.5H2V16.3616H4V19.1801L8.32932 15.0913C8.11751 14.6032 8 14.0647 8 13.5C8 11.6362 9.27477 10.0701 11 9.62602V4.91421L8.61893 7.29528L7.20472 5.88107L12 1.08578ZM12 11.5C10.8954 11.5 10 12.3954 10 13.5C10 13.9456 10.1446 14.3546 10.3897 14.6864C10.7556 15.1819 11.3406 15.5 12 15.5C12.6594 15.5 13.2444 15.1819 13.6103 14.6864C13.8554 14.3546 14 13.9456 14 13.5C14 12.3954 13.1046 11.5 12 11.5Z"/>
               </svg>
@@ -59,6 +59,7 @@
       <div class="edge"></div>
     </div>
   </div>
+  <VTour :steps="tourSteps" name="device-tour" ref="tour" :options="tourOptions" />
 </template>
 
 <script setup>
@@ -76,6 +77,8 @@ import cheatCodeInput from '~/components/cheatCodeInput.vue';
 import cipher from '~/components/cipher.vue';
 import { useOperationsStore } from '~/stores/operationsStore';
 import { useScreenStore } from '~/stores/screenStore'; 
+import { useFirstRunStore } from '~/stores/firstRunStore';
+
 
 const { $event } = useNuxtApp();
 
@@ -83,6 +86,7 @@ const activeOperationStore = useActiveOperationStore();
 const operationsStore = useOperationsStore();
 const unlockedStore = useUnlockedStore();
 const screenStore = useScreenStore();
+const firstRunStore = useFirstRunStore();
 const { isRelayingLocation, locations, isWithinGeofence, errorMessage, checkLocation, clearError } = useGeofencing();
 
 const isNum = ref(true);
@@ -178,6 +182,28 @@ async function handleRelayLocation() {
       screenStore.setScreen(locationFound);
       screenTimeoutRef.value = setTimeout(async () => {
         screenStore.setScreen(cipher);
+        if (!firstRunStore.firstCheckpointFound) {
+          firstRunStore.markFirstCheckpointAsFound(true);
+          tourSteps.value = [
+            {
+              target: "[data-tour='screen-wrapper']",
+              body: "You’ve found your first rendezvous and unlocked your first cipher. Congrats!",
+            },
+            {
+              target: "[data-tour='location-relay']",
+              body: "Solve the cipher using information from your nearby surroundings to unlock the missions",
+            },
+            {
+              target: "[data-tour='keyboard-dial']",
+              body: "Use this dial to switch between letters and numbers.",
+            },
+            {
+              target: "[data-tour='location-relay']",
+              body: "If you get stuck, hit this for a hint. If you get  really stuck, hit up HQ for support.",
+            }
+          ];
+          tour.value?.resetTour();
+        }
       }, 4000);
     } else {
       screenStore.setScreen(locationNotFound);
@@ -234,6 +260,28 @@ const handleEnter = () => {
       screenTimeoutRef.value = setTimeout(() => {
         screenStore.setScreen(cipher)
         cheatCode.value = '';
+        if (!firstRunStore.firstCheckpointFound) {
+          firstRunStore.markFirstCheckpointAsFound(true);
+          tourSteps.value = [
+            {
+              target: "[data-tour='screen-wrapper']",
+              body: "You’ve found your first rendezvous and unlocked your first cipher. Congrats!",
+            },
+            {
+              target: "[data-tour='location-relay']",
+              body: "Solve the cipher using information from your nearby surroundings to unlock the missions",
+            },
+            {
+              target: "[data-tour='keyboard-dial']",
+              body: "Use this dial to switch between letters and numbers.",
+            },
+            {
+              target: "[data-tour='location-relay']",
+              body: "If you get stuck, hit this for a hint. If you get  really stuck, hit up HQ for support.",
+            }
+          ];
+          tour.value?.resetTour();
+        }
       }, 4000);
     } else {
       cheatCode.value = '';
@@ -262,14 +310,42 @@ const handleEnter = () => {
   }
 };
 
-const resetView = () => {
-  console.log('resetting view');
-  screenStore.setScreen(operationsIndex);
-  activeOperationStore.setActiveOperationId(null);
-  code.value = '';
-  cheatCode.value = '';
-  clearTimeout(screenTimeoutRef.value);
-}
+  const resetView = () => {
+    console.log('resetting view');
+    screenStore.setScreen(operationsIndex);
+    activeOperationStore.setActiveOperationId(null);
+    code.value = '';
+    cheatCode.value = '';
+    clearTimeout(screenTimeoutRef.value);
+  }
+
+  const tour = ref(null);
+
+  const tourSteps = ref([
+    {
+      target: "[data-tour='screen-wrapper']",
+      body: "Solve these clues to the location of a rendezvous and go to there",
+    },
+    {
+      target: "[data-tour='location-relay']",
+      body: "Relay your location at when at the rendezvous to unlock the cipher",
+      popperConfig: {
+        placment: 'left'
+      }
+    }
+  ]);
+  const tourOptions = ref({
+    labels: {
+      buttonNext: "Next up"
+    }
+  })
+
+  //watch for $event.startTour and start tour
+  $event.$on('startTour', () => {
+    if (firstRunStore.isFirstRun) {
+      tour.value?.startTour();
+    }
+  });
 </script>
 
 <style lang="scss" scoped>

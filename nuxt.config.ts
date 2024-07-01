@@ -10,11 +10,16 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
+    'nuxt-tour',
   ],
   css: [
     '~/assets/css/reset.css',
     '~/assets/css/main.css',
+    '~/assets/css/tour.css',
   ],
+  tour: {
+    injectSass: false,
+  },
   pwa: {
     registerType: 'autoUpdate',
     includeAssets: ['/icons/favicon.ico', '/icons/apple-touch-icon.png'],

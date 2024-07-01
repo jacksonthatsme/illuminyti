@@ -5,7 +5,7 @@
     <h2>+4 points</h2>
   </div>
 </template>
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref, nextTick } from 'vue';
 import { useNuxtApp } from '#app';
 
