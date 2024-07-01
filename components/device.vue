@@ -268,7 +268,7 @@ const handleEnter = () => {
               body: "You’ve found your first rendezvous and unlocked your first cipher. Congrats!",
             },
             {
-              target: "[data-tour='location-relay']",
+              target: "[data-tour='screen-wrapper']",
               body: "Solve the cipher using information from your nearby surroundings to unlock the missions",
             },
             {
