@@ -6,6 +6,7 @@ export const useFirstRunStore = defineStore('firstRun', {
   state: () => ({
     isInstructionsCompleted: false,
     hasCompletedFirstTour: false,
+    hasCompletedSecondTour: false,
     hasFoundFirstCheckpoint: false,
     hasUnlockedFirstMission: false,
   }),
@@ -21,11 +22,15 @@ export const useFirstRunStore = defineStore('firstRun', {
     },
     markFirstTourAsCompleted(completed) {
       this.hasCompletedFirstTour = completed;
-    }
+    },
+    markSecondTourAsCompleted(completed) {
+      this.hasCompletedSecondTour = completed;
+    },
   },
   getters: {
     instructionsCompleted: (state) => state.isInstructionsCompleted,
     firstTourCompleted: (state) => state.hasCompletedFirstTour,
+    secondTourCompleted: (state) => state.hasCompletedSecondTour,
     firstCheckpointFound: (state) => state.hasFoundFirstCheckpoint,
     firstMissionUnlocked: (state) => state.hasUnlockedFirstMission,
     isFirstRun: (state) => !state.isInstructionsCompleted && !state.hasFoundFirstCheckpoint && !state.hasUnlockedFirstMission,

@@ -349,8 +349,11 @@ const handleEnter = () => {
 
   const handleTourEnd = () => {
     console.log('tour end')
-    if (!firstRunStore.hasCompletedFirstTour && !firstRunStore.firstCheckpointFound) {
+    if (!firstRunStore.hasCompletedFirstTour) {
       firstRunStore.markFirstTourAsCompleted(true);
+    }
+    if (firstRunStore.hasCompletedFirstTour && !firstRunStore.secondCheckpointFound) {
+      firstRunStore.markSecondTourAsCompleted(true);
     }
   }
 </script>
