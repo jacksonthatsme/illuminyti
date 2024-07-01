@@ -4,6 +4,7 @@ code: toys
 id: l-t-c
 cheat-code: 141414
 hidden: true
+hint: 'This is the hint for the cipher at Lower East Side Toy Company'
 polygon:
   - { latitude: 40.7338414, longitude: -73.9964592 }
   - { latitude: 40.7337479, longitude: -73.9965289 }

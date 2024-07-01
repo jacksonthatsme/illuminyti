@@ -4,6 +4,7 @@ code: '0314'
 cheat-code: 666666
 id: b-s-c
 hidden: false
+hint: 'This is the hint for the cipher at Barthmans Sidewalk Clock'
 polygon:
   - { latitude: 40.6728405, longitude: -73.9680708 }
   - { latitude: 40.6723708, longitude: -73.9681244 }

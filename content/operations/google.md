@@ -4,6 +4,7 @@ code: lab
 cheat-code: 666666
 id: g-c-l
 hidden: true
+hint: 'This is the hint for the cipher at Google'
 polygon:
   - { latitude: 40.74230, longitude: -74.00435 }
   - { latitude: 40.74117, longitude: -74.00155 }

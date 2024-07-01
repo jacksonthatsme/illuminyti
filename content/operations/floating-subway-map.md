@@ -4,6 +4,7 @@ code: rhombus
 cheat-code: 444444
 id: f-s-m
 hidden: false
+hint: 'This is the hint for the cipher at Subway Map Floating on a New York Sidewalk'
 polygon:
   - { latitude: 40.724227213799765, longitude: -73.9989123730538 }
   - { latitude: 40.72344749390396, longitude: -73.99724299684905 }

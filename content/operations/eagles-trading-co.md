@@ -4,6 +4,7 @@ code: torrent
 cheat-code: 151515
 id: e-t-c
 hidden: false
+hint: 'This is the hint for the cipher at Eagle Trading Co.'
 polygon:
   - { latitude: 40.6728405, longitude: -73.9680708 }
   - { latitude: 40.6723708, longitude: -73.9681244 }
