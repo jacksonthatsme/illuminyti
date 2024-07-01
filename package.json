@@ -28,6 +28,8 @@
     "geolib": "^3.3.4",
     "mitt": "^3.0.1",
     "nuxt-swiper": "^1.2.2",
-    "pinia": "^2.1.7"
+    "nuxt-tour": "^0.0.13",
+    "pinia": "^2.1.7",
+    "typescript": "^5.5.2"
   }
 }

@@ -14,6 +14,7 @@
 import { ref, watch, onMounted } from 'vue';
 import { useNuxtApp } from '#app';
 import { useTutorialStatus } from '~/stores/tutorialStatusStore';
+import { useFirstRunStore } from '~/stores/firstRunStore';
 
 const { $gsap, $ScrollToPlugin, $ScrollTrigger, $event } = useNuxtApp();
 $gsap.registerPlugin($ScrollTrigger, $ScrollToPlugin);
@@ -24,11 +25,14 @@ const deviceSectionRef = ref(null);
 
 const isDevicePeeking = ref(false);
 const tutorialStatus = useTutorialStatus();
+const firstRunStore = useFirstRunStore();
 
 $event.$on('tutorialComplete', () => {
   console.log('tutorialComplete');
   isDevicePeeking.value = true;
   tutorialStatus.markTutorialCompleted();
+  firstRunStore.markInstructionsAsCompleted();
+
 });
 
 onMounted(() => {
@@ -61,12 +65,16 @@ watch(isDevicePeeking, (newVal) => {
             start: 'bottom bottom',
             end: 'bottom top',
             scrub: true,
-            markers: false // Enable markers for debugging
+            markers: false, // Enable markers for debugging
           }
         });
 
         // Set the scrubbing animation
-        tl.fromTo('.deviceContainer', { y: -240 }, { y: 0 });
+        tl.fromTo('.deviceContainer', { y: -240 }, { y: 0, onComplete: () => {
+          console.log('Device animation scrub complete');
+          // Emit an event to the device component to start the tour
+          $event.$emit('startTour');
+        } });
       }
     });
   }

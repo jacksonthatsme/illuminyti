@@ -95,6 +95,7 @@ watch(() => props.missions, () => {
     min-height: 0;
     display: flex;
     flex-direction: column;
+    padding-bottom: 20px;
 
     &:first-child {
       border-top: 1px solid #272727;
