@@ -61,7 +61,13 @@
       <div class="edge"></div>
     </div>
   </div>
-  <VTour :steps="tourSteps" name="device-tour" ref="tour" :options="tourOptions" @onTourEnd="handleTourEnd" />
+  <VTour 
+    :steps="tourSteps"
+    name="device-tour" 
+    ref="tour" 
+    :options="tourOptions" 
+    @onTourEnd="handleTourEnd"
+  ></VTour>
 </template>
 
 <script setup>
@@ -189,7 +195,7 @@ async function handleRelayLocation() {
           tourSteps.value = [
             {
               target: "[data-tour='screen-wrapper']",
-              body: "You’ve found your first rendezvous and unlocked your first cipher. Congrats!",
+              body: "You’ve found your first rendezvous and unlocked the cipher. Congrats!",
             },
             {
               target: "[data-tour='location-relay']",
@@ -267,7 +273,7 @@ const handleEnter = () => {
           tourSteps.value = [
             {
               target: "[data-tour='screen-wrapper']",
-              body: "You’ve found your first rendezvous and unlocked your first cipher. Congrats!",
+              body: "You’ve found your first rendezvous and unlocked the cipher. Congrats!",
             },
             {
               target: "[data-tour='screen-wrapper']",
@@ -326,7 +332,7 @@ const handleEnter = () => {
   const tourSteps = ref([
     {
       target: "[data-tour='screen-wrapper']",
-      body: "Solve these clues to the location of a rendezvous and go to there",
+      body: "Solve the rendezvous clues and then head to the revealed location",
     },
     {
       target: "[data-tour='location-relay']",

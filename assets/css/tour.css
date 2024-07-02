@@ -17,6 +17,7 @@
   flex-direction: column;
   gap: 5px;
   font-family: 'Offbit';
+  letter-spacing: .1em;
 }
 
 .nt-center {
@@ -32,7 +33,7 @@
   gap: 6px;
 }
 #nt-tooltip-header #nt-tooltip-title {
-  font-size: 16px;
+  font-size: 18px;
   line-height: normal;
   font-weight: 600;
   color: #131313;
@@ -44,9 +45,10 @@
 }
 
 #nt-tooltip-body {
-  font-size: 16px;
+  font-size: 18px;
   text-transform: uppercase;
-  letter-spacing: .02em;
+
+  letter-spacing: .08em;
   line-height: 1.4em;
   color: #131313;
 }
@@ -130,7 +132,7 @@
   padding: 4px 14px;
   border-radius: 5px;
   color: #131313;
-  font-size: 16px;
+  font-size: 18px;
   text-transform: uppercase;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
@@ -138,7 +140,7 @@
   background-color: transparent;
   border-color: transparent;
   font-family: 'Offbit';
-  letter-spacing: .02em;
+  letter-spacing: .1em;
 }
 .nt-actions button#nt-action-skip {
   background-color: transparent;
@@ -155,4 +157,8 @@
 }
 .nt-actions button:hover {
   opacity: 0.85;
+}
+
+#nt-action-skip {
+  display: none;
 }
