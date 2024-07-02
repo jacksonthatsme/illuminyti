@@ -10,6 +10,7 @@ polygon:
   - { latitude: 40.67917, longitude: -73.97372 }
 id: f-b-a
 hidden: true
+hint: 'This is the hint for the cipher at Flatbush Ass'
 missions:
   - points: 1
     content: 'Find a Mystery Cube from Super Mario and hit it. Get a video for a power up of 2 stars.'

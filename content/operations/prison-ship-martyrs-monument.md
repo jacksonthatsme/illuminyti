@@ -3,6 +3,7 @@ name: Prison Ship Martyrs Monument
 code: cannon
 id: p-s-s
 cheat-code: 777777
+hint: 'This is the hint for the cipher at Prison Ship Martyrs Monument'
 hidden: false
 polygon:
   - { latitude: 40.69176399696428, longitude: -73.97613541640887 }

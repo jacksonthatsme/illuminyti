@@ -79,5 +79,12 @@ export default defineNuxtConfig({
       scrollTrigger: true,
       scrollTo: true
     }
+  },
+  vite: {
+    build: {
+      rollupOptions:{
+        external: ['/images/ciphers/eagle-grid.png']
+      }
+    }
   }
 })

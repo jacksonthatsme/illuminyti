@@ -4,6 +4,7 @@ code: donuts
 cheat-code: 333333
 id: d-n-p
 hidden: true
+hint: 'This is the hint for the cipher at Donut Plant'
 polygon:
   - { latitude: 40.68081, longitude: -73.97502 }
   - { latitude: 40.68071, longitude: -73.97455 }

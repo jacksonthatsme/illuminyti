@@ -28,12 +28,14 @@
               @send-home="resetView">
             </component>
           </div>
-          <div class="screenLabel">
-            ny.vrs.10
+          <div class="screenActions">
+            <div class="screenActionButton" @click="showHint" data-tour="hint-button">Hint</div>
+            <div class="screenActionButton" @click="showIndexScreen">Index</div>
+            <div class="screenActionButton" @click="showCheatCode">Cht Cde</div>
           </div>
         </div>
         <div class="punchOuts">
-          <img src="/images/transciever/PunchOuts.png" />
+          <!-- <img src="/images/transciever/PunchOuts.png" /> -->
         </div>
         <div class="controlsContainer">
           <keypad @key-press="handleKeyPress" @backspace="handleBackspace" @enter="handleEnter" :isNum="isNum"></keypad>
@@ -59,7 +61,13 @@
       <div class="edge"></div>
     </div>
   </div>
-  <VTour :steps="tourSteps" name="device-tour" ref="tour" :options="tourOptions" @onTourEnd="handleTourEnd" />
+  <VTour 
+    :steps="tourSteps"
+    name="device-tour" 
+    ref="tour" 
+    :options="tourOptions" 
+    @onTourEnd="handleTourEnd"
+  ></VTour>
 </template>
 
 <script setup>
@@ -187,7 +195,7 @@ async function handleRelayLocation() {
           tourSteps.value = [
             {
               target: "[data-tour='screen-wrapper']",
-              body: "You’ve found your first rendezvous and unlocked your first cipher. Congrats!",
+              body: "You’ve found your first rendezvous and unlocked the cipher. Congrats!",
             },
             {
               target: "[data-tour='location-relay']",
@@ -265,7 +273,7 @@ const handleEnter = () => {
           tourSteps.value = [
             {
               target: "[data-tour='screen-wrapper']",
-              body: "You’ve found your first rendezvous and unlocked your first cipher. Congrats!",
+              body: "You’ve found your first rendezvous and unlocked the cipher. Congrats!",
             },
             {
               target: "[data-tour='screen-wrapper']",
@@ -324,7 +332,7 @@ const handleEnter = () => {
   const tourSteps = ref([
     {
       target: "[data-tour='screen-wrapper']",
-      body: "Solve these clues to the location of a rendezvous and go to there",
+      body: "Solve the rendezvous clues and then head to the revealed location",
     },
     {
       target: "[data-tour='location-relay']",
@@ -354,6 +362,35 @@ const handleEnter = () => {
     }
     if (firstRunStore.hasCompletedFirstTour && firstRunStore.hasFoundFirstCheckpoint &&!firstRunStore.secondCheckpointFound) {
       firstRunStore.markSecondTourAsCompleted(true);
+    }
+  }
+  const showCheatCode = () => {
+    screenStore.setScreen(cheatCodeInput);
+  }
+  const showIndexScreen = () => {
+    screenStore.setScreen(operationsIndex);
+  }
+  const showHint = () => {
+    console.log('show hint')
+    //if screen is operations index
+    if (screenStore.currentScreenComponent === operationsIndex) { 
+      tourSteps.value = [
+        {
+          target: "[data-tour='hint-button']",
+          body: "Hints are only available for ciphers.",
+        },
+      ];
+      tour.value?.resetTour();
+    }
+    if (activeOperation.value && screenStore.currentScreenComponent === cipher) {
+      console.log(activeOperation.value.hint)
+      tourSteps.value = [
+        {
+          target: "[data-tour='hint-button']",
+          body: activeOperation.value.hint,
+        },
+      ];
+      tour.value?.resetTour();
     }
   }
 </script>
@@ -466,20 +503,48 @@ const handleEnter = () => {
     mix-blend-mode: multiply;
     filter: drop-shadow(0px 7px 11px #000000);
   }
-  .screenLabel {
+  .screenActions {
     grid-row: 3 / 4;
     grid-column: 2 / 3;
-    color: #ffffff;
-    opacity: .6;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 2.5%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  .screenActionButton {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%), url('/assets/images/PlasticTextureTile.png'), black 100% / cover no-repeat;
+    box-shadow: 3px 3px 6px 2px rgba(0, 0, 0, 0.75);
+    cursor: pointer;
+    width: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 100%;
     font-family: 'Eurostile';
-    font-weight: 500;
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 8px;
+    line-height: 12px;
     letter-spacing: 1px;
+    color: #C3C3C3;
+    position: relative;
 
+    &:after {
+      content: '';
+      position: absolute;
+      width: 90%;
+      height: 90%;
+      border-radius: 5px;
+      top: 5;
+      left: 5;
+      z-index: 3;
+      border-top: .5px solid rgba(255, 255, 255, 1);
+      border-left: .5px solid rgba(255, 255, 255, 1);
+      filter: blur(1.5px);
+    }
   }
   .light {
     display: flex;
@@ -547,15 +612,22 @@ const handleEnter = () => {
     grid-row: 2/3;
     grid-column: 1/-1;
     text-align: center;
-    img {
-      max-width: 100%;
-      padding: 0 10px;
+    background-image: url('/assets/images/PunchOuts_2-rows.png');
+    background-size: contain;
+    max-width: 100%;
+    height: 38px;
+    margin: 0px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    @media (max-height: 700px) {
+      height: 0px;
     }
 
     @media (min-height: 800px) {
-      display: block;
+      background-image: url('/assets/images/PunchOuts_3-rows.png');
+      height: 58px;
     }
-    display: none;
   }
   .controlsContainer {
     display: grid;

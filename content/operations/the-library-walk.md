@@ -4,6 +4,7 @@ code: cabal
 cheat-code: 333333
 hidden: false
 id: t-l-w
+hint: 'This is the hint for the cipher at The Library Way'
 polygon:
   - { latitude: 40.7529262, longitude: -73.9813731 }
   - { latitude: 40.7527169, longitude: -73.9815561 }

@@ -3,6 +3,7 @@ name: Moynihan Train Hall
 code: badass
 id: m-t-h
 cheat-code: 101010
+hint: 'This is the hint for the cipher at Moynihan Train Hall'
 hidden: false
 polygon:
   - { latitude: 40.75268823209154, longitude: -73.99676549905729 }

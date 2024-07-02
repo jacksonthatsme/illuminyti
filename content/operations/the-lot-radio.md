@@ -4,6 +4,7 @@ code: Danger
 id: t-l-r
 cheat-code: 131313
 hidden: false
+hint: 'This is the hint for the cipher at The Lot Radio'
 polygon:
   - { latitude: 40.7338414, longitude: -73.9964592 }
   - { latitude: 40.7337479, longitude: -73.9965289 }
